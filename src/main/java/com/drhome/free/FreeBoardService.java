@@ -86,6 +86,12 @@ public class FreeBoardService {
 	}
 
 
+	public void deleteBoard(Map<String, Object> deleteBoardData) {
+		freeBoardDAO.deleteBoard(deleteBoardData);
+		
+	}
+
+
 
 
 	

@@ -74,7 +74,6 @@
 	<insert id="writeQnaAnswer" parameterType="Map">
 		INSERT INTO comment
 		(mno, bno, dno, hno, ccontent, cdate)
-
 		VALUES (
 		#{mno},
 		#{bno},
@@ -141,38 +140,35 @@
 
 	<select id="boardSearchAll" parameterType="String"
 		resultType="Map">
-		SELECT b.*
-		FROM board b
-		WHERE b.btitle LIKE CONCAT('%',
-		'${searchWord}',
-		'%')
-		OR b.bcontent LIKE CONCAT('%', '${searchWord}',
-		'%')
-		OR EXISTS
-		(SELECT 1 FROM comment c WHERE c.bno = b.bno AND
-		c.ccontent
-		LIKE
-		CONCAT('%', '${searchWord}', '%'));
+		 SELECT b.*, department.dpkind AS dpkind, COUNT(comment.cno) AS comment_count
+    FROM board b
+    LEFT JOIN department ON b.dpno = department.dpno
+    LEFT JOIN comment ON b.bno = comment.bno
+    WHERE b.btitle LIKE CONCAT('%', '${searchWord}', '%')
+        OR b.bcontent LIKE CONCAT('%', '${searchWord}', '%')
+        OR comment.ccontent LIKE CONCAT('%', '${searchWord}', '%')
+    GROUP BY b.bno;
 	</select>
 
 	<select id="boardSearchTitle" parameterType="String"
 		resultType="Map">
-		SELECT b.*
-		FROM board b
-		WHERE b.btitle LIKE CONCAT('%',
-		'${searchWord}', '%');
+	  SELECT b.*, department.dpkind AS dpkind, COUNT(comment.cno) AS comment_count
+    FROM board b
+    LEFT JOIN department ON b.dpno = department.dpno
+    LEFT JOIN comment ON b.bno = comment.bno
+    WHERE b.btitle LIKE CONCAT('%', '${searchWord}', '%')
+    GROUP BY b.bno;
 	</select>
 
 	<select id="boardSearchContent" parameterType="String"
 		resultType="Map">
-		SELECT b.*
-		FROM board b
-		WHERE b.bcontent LIKE CONCAT('%',
-		'${searchWord}', '%')
-		OR EXISTS
-		(SELECT 1 FROM comment c WHERE c.bno =
-		b.bno AND c.ccontent LIKE CONCAT('%',
-		'${searchWord}', '%'));
+		 SELECT b.*, department.dpkind AS dpkind, COUNT(comment.cno) AS comment_count
+    FROM board b
+    LEFT JOIN department ON b.dpno = department.dpno
+    LEFT JOIN comment ON b.bno = comment.bno
+    WHERE b.bcontent LIKE CONCAT('%', '${searchWord}', '%')
+        OR comment.ccontent LIKE CONCAT('%', '${searchWord}', '%')
+    GROUP BY b.bno;
 	</select>
 
 	<update id="editQna" parameterType="Map">

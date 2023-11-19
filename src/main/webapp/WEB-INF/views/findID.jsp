@@ -87,13 +87,19 @@
                         }
                     	
                       } else {
-                    	    alert("일치하는 정보가 없습니다.");
-                    	    $("#findIDInfo").html("<div class='form-area'><div class='form'><span>회원가입이 필요하신가요? </span><a href='./join'>&nbsp;&nbsp;회원가입 하러 가기</a></div></div>");
+	                          $("#dh-modal-alert2").addClass("active").fadeIn();
+	                          setTimeout(function() {
+	                              $("#dh-modal-alert2").fadeOut(function(){
+	                                  $(this).removeClass("active");
+			                    	    $("#findIDInfo").html("<div class='form-area'><div class='form'><span>회원가입이 필요하신가요? </span><a href='./join'>&nbsp;&nbsp;회원가입 하러 가기</a></div></div>");
+	                              });
+	                          }, 1000);
                     	}
 
                 }, 
                 error : function(error){
-                    alert("에러가 발생했습니다." + error);
+                    $("#findIDInfo").css("color","red");
+                    $("#findIDInfo").text("아이디 찾기 중 오류가 발생했습니다."); 
                 }//에러끝
             });//ajax 끝
 		}); //findIDBtn 끝
@@ -167,6 +173,21 @@
 					알림
 				</div>
 				<div class="dh-modal-text">아이디가 클립보드에 복사되었습니다.</div>
+			</div>
+		</div>
+		<div class="dh-modal-blank"></div>
+	</div>
+	
+			<!-- 알람모달2 -->
+	
+	<div id="dh-modal-alert2">
+		<div class="dh-modal">
+			<div class="dh-modal-content">
+				<div class="dh-modal-title">
+					<img class="dh-alert-img" src="https://cdn-icons-png.flaticon.com/512/6897/6897039.png">
+					알림
+				</div>
+				<div class="dh-modal-text">일치하는 정보가 없습니다.</div>
 			</div>
 		</div>
 		<div class="dh-modal-blank"></div>

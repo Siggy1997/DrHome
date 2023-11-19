@@ -3,7 +3,7 @@
 <mapper namespace="com.drhome.map.MapDAO">
 
 	<select id="hospitalList" resultType="Map">
-		SELECT hno, hname, haddr, himg,
+		SELECT hno, hname, haddr, SUBSTRING_INDEX(himg, ',', 1) AS himg,
 TIME_FORMAT(hopentime, '%H:%i') AS hopentime, 
     TIME_FORMAT(hclosetime, '%H:%i') AS hclosetime,
   CASE

@@ -184,29 +184,27 @@ $(document).ready(function(){
 							}
 
 							if (data.PWresult == 4) {
-								alert("휴면계정 또는 탈퇴회원입니다. 관리자에게 문의해주세요.");
 								$(".info").css("color", "red");
 								$("#mid").focus();
-								$(".info").text("관리자에게 문의하기");
+								$(".info").html("휴면 또는 탈퇴회원입니다. 관리자 문의 바랍니다.");
 							}
 
 							if (data.IDresult == 0) {
-								alert("일치하는 아이디가 없습니다.");
 								$(".info").css("color", "red");
 								$(".info").text("아이디를 다시 확인해주세요.");
 								$("#mid").focus();
 							}
 
 							if (data.PWresult == 0) {
-								alert("비밀번호를 잘못 입력하셨습니다.");
 								$(".info").css("color", "red");
-								$("#mid").focus();
 								$(".info").text("비밀번호를 다시 확인해주세요.");
+								$("#mpw").focus();
 							}
 
 						},//success 끝
 						error : function(error) {
-							alert("에러가 발생했습니다." + error);
+							$(".info").css("color", "red");
+							$(".info").text("로그인 중 오류가 발생했습니다.");
 						}//에러끝
 					});//ajax 끝
 
@@ -241,13 +239,13 @@ $(document).ready(function(){
 		<div class="center-circle-area">
 		<div class="center-circle">
 			<div class="center-img">
-				<img alt="없음" src="/img/hospital2.png">
+				<img alt="없음" src="/img/DrHome_logo_icon.png">
 			</div>
 		</div>
 		</div>
 		
 		<div class="logo-area">
-			<div class="logo-title">DR.HOME</div>
+			<div class="logo-title"><img alt="없음" src="/img/DrHome_logo_text.png"></div>
 		</div>
 		
 		<div class="login-form">
@@ -291,7 +289,6 @@ $(document).ready(function(){
 				<div>결제완료<a href="/completePay/${sessionScope.mno}">&nbsp;&nbsp;바로가기</a></div>   --%>
 	</main>
 	
-	<footer></footer>
 	
 	<!-- 알람모달 -->
 	
@@ -310,3 +307,17 @@ $(document).ready(function(){
 	
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

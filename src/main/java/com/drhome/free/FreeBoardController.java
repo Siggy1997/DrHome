@@ -32,8 +32,6 @@ public class FreeBoardController {
 		List<Map<String, Object>> freeList = freeBoardService.freeList();
 		
 		model.addAttribute("freeList", freeList);
-
-	    // 데이터를 request 객체에 직접 추가
 	    request.setAttribute("freeList", freeList);
 
 		
@@ -197,7 +195,7 @@ public class FreeBoardController {
 
 		 int mno = (int) session.getAttribute("mno");
 		//int mno = 4; // 추후 세션값으로 변경 예정
-
+		 
 		Map<String, Object> commentReportCountData = new HashMap<>();
 		commentReportCountData.put("mno", mno);
 		commentReportCountData.put("cno", cno);
@@ -210,7 +208,7 @@ public class FreeBoardController {
 	}
 
 	@PostMapping("/reportFreeComment")
-	public String reportFreeComment(@RequestParam("bno") int bno, @RequestParam("cno") int cno,
+	public String reportFreeComment(@RequestParam("bno") int bno, @RequestParam("crpno") int crpno,
 			@RequestParam("rpcontent") String rpcontent, Model model,
 			HttpSession session) {
 
@@ -220,13 +218,12 @@ public class FreeBoardController {
 		Map<String, Object> commentReportData = new HashMap<>();
 
 		  LocalDateTime currentDatetime = LocalDateTime.now();
-
 		
-		commentReportData.put("bno", bno); // 추후 세션값으로 변경 예정
-		commentReportData.put("cno", cno); // 추후 세션값으로 변경 예정
-		commentReportData.put("mno", mno); // 추후 세션값으로 변경 예정
+		commentReportData.put("bno", bno); 
+		commentReportData.put("cno", crpno); 
+		commentReportData.put("mno", mno); 
 		commentReportData.put("rpcontent", rpcontent);
-		commentReportData.put("rpurl", "http://localhost:8080/qnaDetail?bno=" + bno);
+		commentReportData.put("rpurl", "/qnaDetail?bno=" + bno);
 		commentReportData.put("rpdate", currentDatetime);
 
 		freeBoardService.reportFreeComment(commentReportData);
@@ -269,5 +266,19 @@ public class FreeBoardController {
 			return "redirect:/freeDetail?bno=" + bno;
 
 	}
+	
+	@PostMapping("/deleteBoard")
+	public String deleteBoard(@RequestParam("bno") int bno) {
+
+		Map<String, Object> deleteBoardData = new HashMap<>();
+
+		deleteBoardData.put("bno", bno);
+		deleteBoardData.put("btype", 2);
+
+		freeBoardService.deleteBoard(deleteBoardData);
+
+		return "redirect:/qnaBoard";
+	}
+
 
 }

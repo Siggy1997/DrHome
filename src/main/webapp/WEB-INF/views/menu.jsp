@@ -34,6 +34,7 @@
 	/* 로그인 확인 */
 	function link(url) {
 		if(${sessionScope.mno == null || sessionScope.mno == ''}){
+
 			$(".dh-modal-wrapper").show();
 		} else {
 			$(".dh-modal-wrapper").hide();
