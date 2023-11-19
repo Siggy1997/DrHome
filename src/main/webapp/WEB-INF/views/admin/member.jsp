@@ -7,88 +7,61 @@
 <head>
 <meta charset="UTF-8">
 <title>회원 승인 및 등급</title>
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <link rel="stylesheet"
 	href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
-<link rel="stylesheet" href="../css/admin.css">
-<link rel="stylesheet" href="../css/member.css">
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<link rel="stylesheet" href="../css/memberManage.css">
+<script src="../js/jquery-3.7.0.min.js"></script>
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/sweet-modal/dist/min/jquery.sweet-modal.min.css" />
 <script
 	src="https://cdn.jsdelivr.net/npm/sweet-modal/dist/min/jquery.sweet-modal.min.js"></script>
 <script type="text/javascript">
-$(document).ready(function () {	
-	
-	function gradeCh(mno, name, value, count) {
-		$.sweetModal({
-			content : name+'님의 등급을 변경하시겠습니까?',
-			icon : $.sweetModal.ICON_WARNING,
-			buttons : {
-				someOtherAction : {
-					label : '예',
-					classes : 'blueB',
-					action : function() {
-						location.href="./gradeChange?mno="+mno+"&grade="+value+"&mboardcount="+count;
-					}
-				},
-				someAction : {
-					label : '아니오',
-					classes : 'redB',
-					action : function() {
-						location.href="./member";
-					}
-				},
-			},
-			width : '70%',
-		});
-	}
+
+function gradeCh(mno, name, value, count) {
+	 $("#dh-modal-alert").addClass("active").fadeIn();
+	    setTimeout(function() {
+	        $("#dh-modal-alert").fadeOut(function(){
+	            $(this).removeClass("active");
+	        });
+	        $('#doneTodayQuiz').show();
+	  	  location.href="./gradeChange?mno="+mno+"&mname"+name+"&mgrade="+value+"&mboardcount="+count;
+	    }, 1000);
 
 
-	$("#clickData").click(function() {
-		alert("!");
-	});
+};   
 
-});	
 </script>
-<style type="text/css">
-.sweet-modal-content {
-	font-size: 35px !important;
-	font-weight: 600 !important;
-}
 
-.sweet-modal-buttons {
-	display: flex !important;
-	justify-content: center !important;
-	border-radius: 15px !important;
-}
-
-.redB, .blueB {
-	font-size: 36px !important;
-	width: 45% !important;
-}
-
-.btn {
-	border: 0;
-	background-color: #00C9FF;
-	border-radius: 15px;
-	color: white;
-	width: 130px;
-	height: 30px;
-	margin-bottom: 30px;
-	margin-top: 30px;
-}
-
-.btnCenter {
-	margin: 0 auto;
-}
-</style>
 </head>
 <body>
-	<div class="container">
-		<div class="main">
+
+	<div id="dh-modal-alert" style="display: none">
+		<div class="dh-modal">
+			<div class="dh-modal-content">
+				<div class="dh-modal-title">
+					<img class="dh-alert-img"
+						src="https://cdn-icons-png.flaticon.com/512/6897/6897039.png">
+					알림
+				</div>
+				<div class="dh-modal-text">회원 등급이 변경되었습니다.</div>
+			</div>
+		</div>
+		<div class="dh-modal-blank"></div>
+	</div>
+
+
+
+	<header>
+		<a href="/login"><i class="xi-angle-left xi-x"></i></a>
+		<div class="headerTitle">회원 관리</div>
+		<div class="blank"></div>
+	</header>
+
+	<main>
+		<div class="container">
 			<div class="article">
-				<h1>회원 관리</h1>
 				<div class="div-table">
 					<div class="div-row table-head">
 						<div class="div-cell table-head">번호</div>
@@ -97,45 +70,17 @@ $(document).ready(function () {
 						<div class="div-cell table-head">등급</div>
 					</div>
 					<c:forEach items="${memberList }" var="row">
-						
-						<div id="clickData" class="div-row <c:if test="${row.mgrade gt 6 }">manager</c:if><c:if test="${row.mgrade gt 4 && row.mgrade lt 7}">doctor</c:if><c:if test="${row.mgrade lt 1 }">cancel</c:if>">
-							<div class="div-cell" style="width: 3%;">${row.mno }</div>
+
+						<div id="clickData"
+							class="div-row <c:if test="${row.mgrade gt 6 }">manager</c:if><c:if test="${row.mgrade gt 4 && row.mgrade lt 7}">doctor</c:if><c:if test="${row.mgrade lt 1 }">cancel</c:if>">
+
+							<div class="div-cell">${row.mno }</div>
 							<div class="div-cell">${row.mid }</div>
 							<div class="div-cell">${row.mname }</div>
+
 							<div class="div-cell">
-							<c:choose>
-								<c:when test="${row.mgrade eq 0}">
-									탈퇴 회원
-								</c:when>
-								<c:when test="${row.mgrade eq 1}">
-									휴면계정
-								</c:when>
-								<c:when test="${row.mgrade eq 2}">
-									일반 회원
-								</c:when>
-								<c:when test="${row.mgrade eq 3}">
-									우수 회원
-								</c:when>
-								<c:when test="${row.mgrade eq 4}">
-									VIP 회원
-								</c:when>
-								<c:when test="${row.mgrade eq 5}">
-									일반 의사
-								</c:when>
-								<c:when test="${row.mgrade eq 6}">
-									전문 의사
-								</c:when>
-								<c:when test="${row.mgrade eq 7}">
-									일반 관리자
-								</c:when>
-								<c:when test="${row.mgrade eq 8}">
-									최고 관리자
-								</c:when>
-							</c:choose>
-							</div>
-							<%-- <div class="div-cell">
 								<select class="grade"
-									onchange="gradeCh(${row.mno }, '${row.mname }', this.value,  ${row.mboardcount })">
+									onchange="gradeCh(${row.mno}, '${row.mname}', this.value, ${row.mboardcount})">
 									<optgroup label="이용불가">
 										<option value="0"
 											<c:if test="${row.mgrade eq 0}">selected="selected"</c:if>>탈퇴회원</option>
@@ -161,15 +106,15 @@ $(document).ready(function () {
 											<c:if test="${row.mgrade eq 8}">selected="selected"</c:if>>최고관리자</option>
 									</optgroup>
 								</select>
-							</div> --%>
+							</div>
 						</div>
 					</c:forEach>
-					<div class="btnCenter">
-						<button class="btn" onclick="location.href='./main'">돌아가기</button>
-					</div>
 				</div>
 			</div>
 		</div>
-	</div>
+	</main>
+	<footer>
+		<button onclick="location.href='../login'">돌아가기</button>
+	</footer>
 </body>
 </html>

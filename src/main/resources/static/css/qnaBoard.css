@@ -509,3 +509,11 @@ z-index: 1500;
 	align-items: center;
 
 }
+
+.footer20 {
+	width: 20%
+}
+.footerMap {
+	display: flex;
+	justify-content: center;
+}

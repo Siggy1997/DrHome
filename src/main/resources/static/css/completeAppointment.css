@@ -14,7 +14,9 @@
 	margin: 0;
 	padding: 0;
 }
-
+body{
+	background-color: white;
+}
 .complete-area {
 	padding-top: 13vh;
 }

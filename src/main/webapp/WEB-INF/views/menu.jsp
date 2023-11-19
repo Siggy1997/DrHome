@@ -24,8 +24,7 @@
 		});
 		
 		/* 로그인 창 */
-		let sessionId = "<%=session.getAttribute("mid")%>"
-		if( sessionId == "null" || sessionId == '' ) {
+		if(${sessionScope.mno == null || sessionScope.mno == ''}){
 			$(".ham-menu").addClass("ham-noLogin");
 		} else {
 			$(".ham-menu").removeClass("ham-noLogin");
@@ -34,9 +33,7 @@
 	
 	/* 로그인 확인 */
 	function link(url) {
-		let sessionId = "<%=session.getAttribute("mid")%>
-	"
-		if (sessionId == "null" || sessionId == '') {
+		if(${sessionScope.mno == null || sessionScope.mno == ''}){
 			$(".dh-modal-wrapper").show();
 		} else {
 			$(".dh-modal-wrapper").hide();

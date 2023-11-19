@@ -66,6 +66,7 @@
 			$(this).addClass('selectedFeedback')
 
 			$('.reviewContent').show()
+			$('#finish').show()
 		});
 
 		$(document).on('input', '#content', function() {
@@ -81,8 +82,6 @@
 					if (rate !== undefined && dno !== undefined
 							&& keyword !== undefined
 							&& $('#content').val().length > 10) {
-						alert(rate)
-						alert("!!!!")
 						let form = $('<form></form>');
 						form.attr("action", "./writeReview");
 						form.attr("method", "post");
@@ -150,18 +149,10 @@
 
 	<main class="total container">
 
-				<div class="selectStars">
-					<c:forEach var="i" begin="1" end="5">
-						<i class="star${i } xi-star-o"> <input id="rate" type="hidden"
-							value="${i }"></i>
-					</c:forEach>
-				</div>
-			</div>
-		</div>
 		<div class="goUp">
 			<div class="hospitalImg">
 				<img alt=""
-					src="https://cdn0.iconfinder.com/data/icons/medical-flat-20/58/006_Hospital-1024.png">
+					src="../img/hospital-building.png">
 			</div>
 			<div id="hospitalName">
 				<span>${hospital.hname }</span>
