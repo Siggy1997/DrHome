@@ -155,6 +155,10 @@ public class AdminService {
 		return adminDAO.doctorDetail(rhno);
 	}
 
+	public Map<String, Object> detailTwo(int rdno) {
+		return adminDAO.detailTwo(rdno);
+	}
+
 	/*
 	 * public List<Map<String, Object>> hospitalList(int rhno) { return
 	 * adminDAO.hospitalList(rhno); }

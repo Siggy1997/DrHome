@@ -80,15 +80,13 @@ public class AdminController {
 		model.addAttribute("report", report);
 
 		return "admin/report";
-	} 
-	
-	@GetMapping("/admin/gradeChange")
+	}
+ 
+	// gradeChange
+	@RequestMapping(value = "/admin/gradeChange", method = RequestMethod.GET)
 	public String gradeChange(@RequestParam Map<String, String> map) {
 		
-		System.out.println(map);
-	//	if (mboardcount >= 5) {
-		//	map.put("grade", "0");
-	//	}
+
 
 		int result = adminService.gradeChange(map);
 		return "redirect:/admin/member";
@@ -123,7 +121,7 @@ public class AdminController {
 		return "/newHospital";
 	}
 
-	@PostMapping("/hospitalAdd")
+	@PostMapping("/newDoctor")
 	public String newHospital(@RequestParam Map<String, Object> map) {
 		System.out.println(map.get("rhno"));
 		
@@ -268,13 +266,20 @@ public class AdminController {
 	}
 	
 	@PostMapping("/admin/newHosDoc")
-	public String realHospital(@RequestParam("rhno") int rhno) {
+	public String realHospital(@RequestParam("rhno") int rhno, @RequestParam("rdno") int rdno) {
+		System.out.println(rdno);
 		
 		Map<String, Object> hospitalApproval = adminService.detailOne(rhno);
 		int insertHospital = adminService.insertHospital(hospitalApproval);
 		System.out.println(insertHospital);
 		int deleteHospital = adminService.deleteHospital(rhno);
 		System.out.println(deleteHospital);
+		
+		Map<String, Object> doctorApproval = adminService.detailTwo(rdno);
+		int insertDoctor = adminService.insertDoctor(doctorApproval);
+		System.out.println(insertDoctor);
+		int deleteDoctor = adminService.deleteDoctor(rdno);
+		System.out.println(deleteDoctor);
 		
 		return "redirect:/admin/newHosDoc";
 	}

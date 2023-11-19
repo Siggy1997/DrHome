@@ -78,8 +78,8 @@
 	</select>
 
 	<insert id="insertRegisterHos" parameterType="Map">
-		INSERT INTO registerhospital (rhname, rhopendate, rhaddr, rhtelnumber, rhinfo, rhopentime, rhclosetime, rhnightday, rhnightendtime, rhbreaktime, rhbreakendtime, rhholiday, rhholidayendtime, rhparking)
-		VALUES (#{rhname}, #{rhopendate}, #{rhaddr}, #{rhtelnumber}, #{rhinfo}, #{rhopentime}, #{rhclosetime}, #{rhnightday}, #{rhnightendtime}, #{rhbreaktime}, #{rhbreakendtime}, #{rhholiday}, #{rhholidayendtime}, #{rhparking})
+		INSERT INTO registerhospital (rhname, rhopendate, rhaddr, rhtelnumber, rhimg, rhinfo, rhopentime, rhclosetime, rhnightday, rhnightendtime, rhbreaktime, rhbreakendtime, rhholiday, rhholidayendtime, rhparking)
+		VALUES (#{rhname}, #{rhopendate}, #{rhaddr}, #{rhtelnumber}, #{rhimg}, #{rhinfo}, #{rhopentime}, #{rhclosetime}, #{rhnightday}, #{rhnightendtime}, #{rhbreaktime}, #{rhbreakendtime}, #{rhholiday}, #{rhholidayendtime}, #{rhparking})
 	 	<selectKey resultType="Integer" keyProperty="rhno" order="AFTER">
         	SELECT LAST_INSERT_ID()
     	</selectKey>   
@@ -90,6 +90,11 @@
 		VALUES (#{rhname}, #{rhopendate}, #{rhaddr}, #{rhtelnumber}, #{rhimg}, #{rhinfo}, #{rhopentime}, #{rhclosetime}, #{rhnightday}, #{rhnightendtime}, #{rhbreaktime}, #{rhbreakendtime}, #{rhholiday}, #{rhholidayendtime}, #{rhparking})
 	</insert>
 	
+	<insert id="insertDoctor" parameterType="Map">
+		INSERT INTO doctor (dname, dimg, dinfo, dgender, dcareer, dspecialist, dpno, hno, dtelehealth)
+		VALUES (#{rdname}, #{rdimg}, #{rdinfo}, #{rdgender}, #{rdcareer}, #{rdspecialist}, #{dpno}, #{rhno}, #{rdtelehealth})
+	</insert>
+	
 	<!-- <select id="hospitalList" parameterType="Integer" resultType="Map">
 		SELECT *
 		FROM registerhospital
@@ -97,8 +102,8 @@
 	</select> -->
 	
 	<insert id="insertRegisterDoc" parameterType="Map">
-		INSERT INTO registerdoctor (rdname, rdinfo, rdgender, rdcareer, rdspecialist, dpno, rhno, rdtelehealth)
-		VALUES (#{rdname}, #{rdinfo}, #{rdgender}, #{rdcareer}, #{rdspecialist}, #{dpno}, #{rhno}, #{rdtelehealth})
+		INSERT INTO registerdoctor (rdname, rdimg, rdinfo, rdgender, rdcareer, rdspecialist, dpno, rhno, rdtelehealth)
+		VALUES (#{rdname}, #{rdimg}, #{rdinfo}, #{rdgender}, #{rdcareer}, #{rdspecialist}, #{dpno}, #{rhno}, #{rdtelehealth})
 	</insert>
 
 	<insert id="insertRegisterDocom" parameterType="Map">
@@ -106,10 +111,6 @@
 		VALUES (#{rdname}, #{rdimg}, #{rdinfo}, #{rdgender}, #{rdcareer}, #{rdspecialist}, #{dpno}, #{rhno}, #{rdtelehealth})
 	</insert>
 
-	<insert id="insertDoctor" parameterType="Map">
-		INSERT INTO doctor (dname, dimg, dinfo, dgender, dcareer, dspecialist, dpno, hno, dtelehealth)
-		VALUES (#{rdname}, #{rdimg}, #{rdinfo}, #{rdgender}, #{rdcareer}, #{rdspecialist}, #{dpno}, #{rhno}, #{rdtelehealth})
-	</insert>
 	
 	<update id="resultCh" parameterType="Map">
 		UPDATE registerhospital 
@@ -117,10 +118,10 @@
 	</update>
 	
 	<select id="detail" parameterType="Integer" resultType="Map">
-		SELECT *
-		FROM registerhospital rh
-		JOIN registerdoctor rd
-		ON rh.rhno = rd.rhno
+		SELECT rh.rhno, rh.rhname, rh.rhopendate, rh.rhaddr, rh.rhtelnumber, rh.rhimg, rh.rhinfo, DATE_FORMAT(rh.rhopentime, '%H:%i') AS rhopentime, DATE_FORMAT(rh.rhclosetime, '%H:%i') AS rhclosetime, rh.rhnightday, DATE_FORMAT(rh.rhnightendtime, '%H:%i') AS rhnightendtime, DATE_FORMAT(rh.rhbreaktime, '%H:%i') AS rhbreaktime, DATE_FORMAT(rh.rhbreakendtime, '%H:%i') AS rhbreakendtime, rh.rhholiday, DATE_FORMAT(rh.rhholidayendtime, '%H:%i') AS rhholidayendtime, rh.rhparking  
+		FROM registerdoctor rd
+		JOIN registerhospital rh
+		ON rd.rhno = rh.rhno
 		WHERE rh.rhno=#{rhno}
 	</select>
 	
@@ -128,6 +129,12 @@
 		SELECT *
 		FROM registerhospital
 		WHERE rhno=#{rhno}
+	</select>
+	
+	<select id="detailTwo" parameterType="Integer" resultType="Map">
+		SELECT *
+		FROM registerdoctor
+		WHERE rdno=#{rdno}
 	</select>
 	
 	<select id="detailDoctor" parameterType="Integer" resultType="Map">
@@ -213,11 +220,17 @@
 	</delete>
 	
 	<select id="hospitalDetail">
-		SELECT * FROM registerhospital WHERE rhno=#{rhno};
+		SELECT rhno, rhname, rhopendate, rhaddr, rhtelnumber, rhimg, rhinfo, DATE_FORMAT(rhopentime, '%H:%i') AS rhopentime, DATE_FORMAT(rhclosetime, '%H:%i') AS rhclosetime, rhnightday, DATE_FORMAT(rhnightendtime, '%H:%i') AS rhnightendtime, DATE_FORMAT(rhbreaktime, '%H:%i') AS rhbreaktime, DATE_FORMAT(rhbreakendtime, '%H:%i') AS rhbreakendtime, rhholiday, DATE_FORMAT(rhholidayendtime, '%H:%i') AS rhholidayendtime, rhparking  FROM registerhospital WHERE rhno=#{rhno};
 	</select>
 	
 	<select id="doctorDetail">
-		SELECT * FROM registerdoctor WHERE rhno=#{rhno};
+		SELECT * 
+		FROM registerdoctor rd 
+		JOIN department d 
+		ON rd.dpno = d.dpno
+		JOIN registerhospital rh 
+		ON rd.rhno = rh.rhno 
+		WHERE rd.rhno=#{rhno};
 	</select>
 	
 	

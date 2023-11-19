@@ -58,6 +58,7 @@
 			.ready(
 					function() {
 						let rhno = 0;
+						let rdno = 0;
 
 						$(document)
 								.on(
@@ -102,7 +103,7 @@
 																			hos.rhclosetime);
 															$('#rhnightday')
 																	.text(
-																			hos.rhclosetime);
+																			hos.rhnightday);
 															$('#rhnightendtime')
 																	.text(
 																			hos.rhnightendtime);
@@ -114,50 +115,60 @@
 																			hos.rhbreakendtime);
 															$('#rhholiday')
 																	.text(
-																			hos.rhholiday);
+																			hos.rhholiday == 0 ? '진료 X'
+																					: '진료 O');
 															$(
 																	'#rhholidayendtime')
 																	.text(
 																			hos.rhholidayendtime);
 															$('#rhparking')
 																	.text(
-																			hos.rhparking);
+																			hos.rhparking == 0 ? '불가능'
+																					: '가능');
+															$("#approve1").val(
+																	hos.rhno);
+															$("#approve2").val(
+																	doc.rdno);
 															$('#rhimg').text(
 																	hos.rhimg);
 
 															for (let i = 0; i < doc.length; i++) {
 																let oneDoc = doc[i];
-																let item = "<div class='swiper-slide'>";
-																item += "<div class= 'detailTitle'>DOCTOR</div>";
-																item += "<div>의사이름 : "
-																		+ oneDoc.rdname
-																		+ "</div>"
-																item += "<div>소개 : "
-																		+ oneDoc.rdinfo
-																		+ "</div>"
-																item += "<div>성별 : "
-																		+ oneDoc.rdgender
-																		+ "</div>"
-																item += "<div>학력 : "
-																		+ oneDoc.rdcareer
-																		+ "</div>"
-																item += "<div>전문의 : "
-																		+ oneDoc.rdspecialist
-																		+ "</div>"
-																item += "<div>비대면 진료 여부 : "
-																		+ oneDoc.rdtelehealth
-																		+ "</div>"
-																item += "<div>진료과 : "
-																		+ oneDoc.dpno
-																		+ "</div>"
-																item += "<div>등록 병원 : "
-																		+ oneDoc.rhno
-																		+ "</div>"
-																item += "<div>이미지 : "
-																		+ oneDoc.rdimg
-																		+ "</div>"
-																item += "</div>"
 
+																let item = "<div class='swiper-slide'>";
+																item += "<div class= 'detailTitle' id= 'rdname'>"
+																		+ oneDoc.rdname
+																		+ "</div>";
+																item += "<span class='xi-close xi-x'></span>";
+																item += "<div class='Docs'></div>";
+																item += "<div class='wrapper'><div class='tagTitle1'>소개</div><span class='rdinfo'>"
+																		+ oneDoc.rdinfo
+																		+ "</span></div>";
+																item += "<div class='wrapper'><div class='tagTitle1'>성별</div><span class='rdgender'>"
+																		+ (oneDoc.rdgender == 0 ? '남자'
+																				: '여자')
+																		+ "</span></div>";
+																item += "<div class='wrapper'><div class='tagTitle1'>학력</div><span class='rdcareer'>"
+																		+ oneDoc.rdcareer
+																		+ "</span></div>";
+																item += "<div class='wrapper'><div class='tagTitle1'>전문 여부</div><span class='rdspecialist'>"
+																		+ (oneDoc.rdspecialist == 0 ? '일반인'
+																				: '전문의')
+																		+ "</span></div>";
+																item += "<div class='wrapper'><div class='tagTitle1'>비대면 여부</div><span class='rdtelehealth'>"
+																		+ (oneDoc.rdtelehealth == 0 ? '진료 X'
+																				: '진료 O')
+																		+ "</span></div>";
+																item += "<div class='wrapper'><div class='tagTitle1'>진료과</div><span class='dpno'>"
+																		+ oneDoc.dpkind
+																		+ "</span></div>";
+																item += "<div class='wrapper'><div class='tagTitle1'>등록 병원</div><span class='rhno'>"
+																		+ oneDoc.rhname
+																		+ "</span></div>";
+																item += "<div class='wrapper'><div class='tagTitle1'>이미지</div><span class='rdimg'>"
+																		+ oneDoc.rdimg
+																		+ "</span></div>";
+																item += "</div>";
 																$(
 																		'.swiper-wrapper')
 																		.append(
@@ -185,8 +196,7 @@
 											searchV = $("input[name=searchV]")
 													.val();
 
-											$
-													.ajax({
+											$.ajax({
 														url : "./searchHos",
 														type : "POST",
 														data : {
@@ -198,27 +208,28 @@
 															let searchHos = data.searchHos;
 															let tableMake = "";
 
+															tableMake += "<div id='searchDiv'>";
 															$("#searchTable")
 																	.empty();
 
 															for (let i = 0; i < searchHos.length; i++) {
 																tableMake += "<div class='chkData' id='searchTable'>";
-																tableMake += "<div>"
-																		+ searchHos[i].rhno
-																		+ "</div>";
-																tableMake += "<div>"
+															
+																tableMake += "<div class='bold'>"
 																		+ searchHos[i].rhname
 																		+ "</div>";
-																tableMake += "<div>"
+																tableMake += "<div class='locate'>"
 																		+ searchHos[i].rhaddr
 																		+ "</div>";
 																tableMake += "<div>"
 																		+ searchHos[i].rhtelnumber;
-																tableMake += "<span>"
+																tableMake += "<span class='mini'>"
 																		+ searchHos[i].rhopendate
 																		+ "</span></div>";
 																tableMake += "<div class='graySeperate'></div></div>";
+															tableMake += "<div class='oneData'></div>";
 															}
+
 
 															$("#searchDiv")
 																	.append(
@@ -254,6 +265,10 @@
 								return false;
 							}
 						});
+
+						$(document).on('click', '.xi-close', function() {
+							$('.dh-modal-wrapper').hide();
+						});
 					});
 </script>
 </head>
@@ -266,34 +281,35 @@
 
 	</header>
 	<main>
-		<div class="grabSearch">
-			<div class="searchTab">
-				<select class="searchN" id="searchN" name="searchN">
+		 
+
+         <div class="grabSearch">
+            <div class="searchTab">
+                <select class="searchN" id="searchN" name="searchN">
 					<option value="" selected="selected">전체</option>
 					<option value="rhname">병원명</option>
 					<option value="rhaddr">주소</option>
-				</select> <input type="text" class="searchV" id="searchV" name="searchV"
-					maxlength="10" />
-				<button id="searchHos" type="button">검색</button>
-			</div>
-		</div>
-
+				</select> 
+				<input type="text" name="searchV" id="searchV" placeholder="검색 할 내용을 입력하세요">
+              	<button id="searchHos" type="button" class="xi-search xi-x"></button>
+            </div>  	
+         </div>
 
 		<div id="searchDiv">
 			<c:forEach items="${hospitalOpen}" var="hospitalOpen">
 				<div class="chkData" id="searchTable">
-					<div>${hospitalOpen.rhno }</div>
-					<div>${hospitalOpen.rhname }</div>
-					<div>${hospitalOpen.rhaddr}</div>
+					<div style="display: none">${hospitalOpen.rhno }</div>
+					<div class="bold">${hospitalOpen.rhname }</div>
+					<div class="locate">${hospitalOpen.rhaddr}</div>
 					<div>${hospitalOpen.rhtelnumber}
-						<span>${hospitalOpen.rhopendate}</span>
+						<span class="mini">${hospitalOpen.rhopendate}</span>
 					</div>
 					<div class="graySeperate"></div>
 				</div>
+				<div class="oneData"></div>
 			</c:forEach>
 		</div>
 
-		<!-- 모달 -->
 		<div class="dh-modal-wrapper" style="display: none">
 			<div class="dh-modal-body">
 				<div class="swiper">
@@ -301,85 +317,75 @@
 					<div class="swiper-wrapper">
 
 						<div class="swiper-slide">
-							<div class="detailTitle">HOSPITAL</div>
+							<div class="detailTitle" id="rhname"></div>
+							<span class="xi-close xi-x" data-bs-dismiss="modal"></span>
 
-							<div>
-								<div>번호</div>
-								<div id="rhno">번호</div>
+							<div class="oneData"></div>
+
+							<div class="wrapper">
+								<div class="tagTitle">개원일</div>
+								<span id="rhopendate">개원일</span>
+
 							</div>
 
-							<div>
-								<div>등록병원명</div>
-								<div id="rhname">등록병원명</div>
+							<div class="wrapper">
+								<div class="tagTitle">주소</div>
+								<span id="rhaddr">주소</span>
 							</div>
 
-							<div>
-								<div>개원일</div>
-								<div id="rhopendate">개원일</div>
+							<div class="wrapper">
+								<div class="tagTitle">전화번호</div>
+								<span id="rhtelnumber">전화번호</span>
 							</div>
 
-							<div>
-								<div>주소</div>
-								<div id="rhaddr">주소</div>
-							</div>
-
-							<div>
-								<div>전화번호</div>
-								<div id="rhtelnumber">전화번호</div>
-							</div>
-
-							<div>
-								<div>등록병원 소개</div>
-								<div id="rhinfo">등록병원 소개</div>
-							</div>
-
-							<div>
-								<div>시작시간</div>
-								<div id="rhopentime">시작시간</div>
-							</div>
-
-							<div>
-								<div>종료시간</div>
-								<div id="rhclosetime">종료시간</div>
-							</div>
-
-							<div>
-								<div>야간 진료요일</div>
-								<div id="rhnightday">야간 진료요일</div>
-							</div>
-
-							<div>
-								<div>야간 종료시간</div>
-								<div id="rhnightendtime">야간 종료시간</div>
-							</div>
-
-							<div>
-								<div>브레이크타임</div>
-								<div id="rhbreaktime">브레이크타임</div>
-							</div>
-
-							<div>
-								<div>브레이크 종료시간</div>
-								<div id="rhbreakendtime">브레이크 종료시간</div>
-							</div>
-
-							<div>
-								<div>공휴일 진료여부</div>
-								<div id="rhholiday">공휴일 진료여부</div>
-							</div>
-
-							<div>
-								<div>공휴일 종료시간</div>
-								<div id="rhholidayendtime">공휴일 종료시간</div>
-							</div>
-
-							<div>
-								<div>주차여부</div>
+							<div class="wrapper">
+								<div class="tagTitle">주차여부</div>
 								<div id="rhparking">주차여부</div>
 							</div>
+
+							<div class="spaceBetween"></div>
+
+							<div class="container" style="display: flex;">
+								<div class="wrapper2">
+									<div class="tag">진료시간</div>
+									<div class="time">
+										<span id="rhopentime">시작시간</span>&nbsp;~&nbsp;<span
+											id="rhclosetime">종료시간</span>
+									</div>
+								</div>
+
+								<div class="wrapper3">
+									<div class="tag">점심시간</div>
+									<div class="time">
+										<span id="rhbreaktime">브레이크타임</span>&nbsp;~&nbsp;<span
+											id="rhbreakendtime">브레이크 종료시간</span>
+									</div>
+								</div>
+							</div>
+
+							<div class="container" style="display: flex;">
+								<div class="wrapper2">
+									<div class="tag">야간진료</div>
+									<div class="time">
+										<span id="rhnightday">야간 진료요일</span>&nbsp;|&nbsp;<span
+											id="rhnightendtime">야간 종료시간</span>
+									</div>
+								</div>
+
+								<div class="wrapper3">
+									<div class="tag">공휴일 진료시간</div>
+									<div class="time">
+										<span id="rhholiday"></span>&nbsp;|&nbsp; <span
+											id="rhholidayendtime"></span>
+									</div>
+								</div>
+							</div>
+
+							<div class="spaceBetween"></div>
+
 							<div>
-								<div>이미지</div>
-								<div id="rhimg">이미지</div>
+								<div class="tag">병원 소개</div>
+								<div id="rhinfo">병원 소개</div>
 							</div>
 
 						</div>
@@ -393,29 +399,15 @@
 
 				</div>
 
-
-
+				<!-- 		 <form action="/admin/newHosDoc" method="POST">
+         	<input type="hidden" id="approve1" name="rhno" value="" />
+         	<input type="hidden" id="approve2" name="rdno" value="" />
+         	<button type="submit" class="dhBtn" id="confirm">승인</button>
+	     </form>
+	     <button type="button" class="dhBtn" id="cancel">삭제</button> -->
+				<button id="goLogin" onclick="location.href='/admin/hospitalOpen'">승 인</button>
 			</div>
 		</div>
-
-
-		<div class="dh-modal-footer">
-			<button class="dh-modal-button dh-close-modal">취소</button>
-			<button class="dh-modal-button" onclick="location.href='/login'">로그인</button>
-		</div>
-
-
-
-
-
-
-		<form action="/admin/newHosDoc" method="POST">
-			<input type="hidden" id="approve" name="rhno" value="" />
-			<button type="submit" class="dhBtn" id="confirm">승인</button>
-		</form>
-		<button type="button" class="dhBtn" id="cancel">삭제</button>
-
-
 
 
 		<div style="height: 9vh"></div>
@@ -428,11 +420,9 @@
 			// Optional parameters
 			direction : 'horizontal',
 			loop : true,
-
 			pagination : {
 				el : '.swiper-pagination',
 			},
-
 		});
 	</script>
 
