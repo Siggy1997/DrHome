@@ -91,4 +91,19 @@
 	    </selectKey>
 	</insert>
 	
+	<select id="countReviewByRate" resultType="Map">
+		SELECT COUNT(CASE
+		WHEN
+		rrate = '5' THEN 1 END) AS veryGood,
+		COUNT(CASE WHEN rrate = '4' THEN 1
+		END) AS good,
+		COUNT(CASE WHEN rrate = '3' THEN 1 END) AS normal,
+		COUNT(CASE WHEN rrate = '2'
+		THEN 1 END) AS bad,
+		COUNT(CASE WHEN rrate =
+		'1' THEN 1 END) AS veryBad
+		FROM review WHERE
+		dno =#{dno}
+	</select>
+	
 </mapper>

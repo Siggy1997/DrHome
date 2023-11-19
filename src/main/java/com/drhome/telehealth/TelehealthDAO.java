@@ -38,4 +38,6 @@ public interface TelehealthDAO {
 
 	Map<String, Object> userInfo(Object mno);
 
+	Map<String, Object> countReviewByRate(int dno);
+
 }

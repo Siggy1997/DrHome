@@ -18,7 +18,7 @@
 	$(function(){
 		/* 뒤로가기 버튼 */
 		$(document).on("click", ".xi-angle-left", function(){
-			location.href = "../menu";
+			history.back();
 		});
 		
 		/* 병원 총 개수 세기 */
@@ -51,6 +51,14 @@
 				
 			/* 채워진 하트 눌렀을 때 -> 빈 하트 */
 			} else {
+				event.preventDefault();
+				 $("#dh-modal-alert").addClass("active").fadeIn();
+				    setTimeout(function() {
+				        $("#dh-modal-alert").fadeOut(function(){
+				            $(this).removeClass("active");
+				        });
+				    }, 1500);
+				    
 				$(this).parent().parent($(".hospitalListContainer")).hide();
 				hospitalCount = $(".hospitalListContainer:visible").length;
 				hospitalDelName = $(this).siblings().find($(".hospitalName")).text();
@@ -110,7 +118,7 @@
 	<!-- header -->
 	<header>
 		<i class="xi-angle-left xi-x"></i>
-		<div class="hospitalLikeHeaderText headerTitle">즐겨찾기</div>
+		<div class="hospitalLikeHeaderText headerTitle">즐겨찾는 병원</div>
 		<div class="blank blankImg" onclick="location.href='../hospital'"><i class="xi-plus xi-x"></i></div>
 	</header>
 	
@@ -203,6 +211,21 @@
 			</c:forEach>
 		</c:if>
 	</div>
+	
+	<!-- 알림창 -->
+	<div id="dh-modal-alert">
+		<div class="dh-modal">
+			<div class="dh-modal-content">
+				<div class="dh-modal-title">
+					<img class="dh-alert-img" src="https://cdn-icons-png.flaticon.com/512/6897/6897039.png">
+					알림
+				</div>
+				<div class="dh-modal-text">즐겨찾는 병원이 해제되었습니다.</div>
+			</div>
+		</div>
+		<div class="dh-modal-blank"></div>
+	</div>
+	
    </main>
 </body>
 </html>

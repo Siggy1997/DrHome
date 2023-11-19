@@ -66,6 +66,7 @@ public class MainController {
 		if ( session.getAttribute("mno") != null && session.getAttribute("mno") != "") {
 			Map<String, Object> userInfo = mainService.userInfo(session.getAttribute("mno"));
 			model.addAttribute("userInfo", userInfo);
+			System.out.println(userInfo);
 		}
 		return "/menu";
 	}

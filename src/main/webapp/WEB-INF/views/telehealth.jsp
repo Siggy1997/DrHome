@@ -20,28 +20,32 @@
 		
 		/* 뒤로가기 버튼 */
 		$(document).on("click", ".xi-angle-left", function(){
-			history.back();
+			location.href = '/telehealthSearch';
 		});
 		
-		$("#keyword").val('비대면 진료');
 		let urlString = location.search;
 		let urlParams = new URLSearchParams(urlString);
 		let kindKeyword = urlParams.get('kindKeyword');
 		let symptomKeyword = urlParams.get('symptomKeyword');
+		let keyword = urlParams.get('keyword');
 		
 		if (kindKeyword != null) {
+			$("#keyword").val(kindKeyword);
 			$(".selectByDepartmentText").text(kindKeyword);
 			$(".selectByDepartment").addClass("btn-color-css");
 			$(".departmentKind").filter(function() {
 			    return $(this).text().trim() === kindKeyword;
 			}).addClass("btn-color-css");
 		} else if (symptomKeyword != null) {
+			$("#keyword").val(symptomKeyword);
 			$(".selectByDepartmentText").text(symptomKeyword);
 			$(".selectByDepartment").addClass("btn-color-css");
 			$(".symptomKind").filter(function() {
 			    return $(this).text().trim() === symptomKeyword;
 			}).addClass("btn-color-css");
-		} 
+		} else {
+			$("#keyword").val(keyword);
+		}
 		
 		/* 입력할 때 내용 지우기 */
 		if ($("#keyword").val() !== '') {

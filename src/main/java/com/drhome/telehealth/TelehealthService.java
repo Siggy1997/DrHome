@@ -70,4 +70,8 @@ public class TelehealthService {
 		telehealthDAO.apply(map);
 	}
 
+	public Map<String, Object> countReviewByRate(int dno) {
+		return telehealthDAO.countReviewByRate(dno);
+	}
+
 }

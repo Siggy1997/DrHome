@@ -160,8 +160,7 @@ public class TelehealthController {
 	@GetMapping("/doctorDetail/{dno}")
 	public String doctorDetail(@PathVariable int dno, Model model) {
 		 
-		Map<String, Object> reviewCount = hospitalDetailService.countReviewByRate(dno);
-		
+		Map<String, Object> reviewCount = telehealthService.countReviewByRate(dno);
 		model.addAttribute("reviewCount", reviewCount);
 		
 		// 현재 요일, 시간
@@ -230,9 +229,11 @@ public class TelehealthController {
 	// 비대면 진료 의사 상세페이지 내 글 리뷰 삭제하기
 	@ResponseBody
 	@PostMapping("/reviewDelete")
-	public String reviewDelete(@RequestParam("rno") int rno) {
+	public String reviewDelete(@RequestParam("rno") int rno, @RequestParam("dno") int dno) {
 		telehealthService.reviewDelete(rno);
+		Map<String, Object> doctor = telehealthService.doctor(dno);
 		JSONObject json = new JSONObject();
+		json.put("doctor", doctor);
 		return json.toString();
 	}
 	

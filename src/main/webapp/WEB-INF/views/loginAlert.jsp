@@ -17,7 +17,7 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	z-index: 1499;
+	z-index: 3000;
 }
 
 .dh-modal-login {
@@ -29,7 +29,7 @@
 	align-items: center;
 	border-radius: 8px;
 	margin: 25px;
-	z-index: 1500;
+	z-index: 3100;
 }
 
 .dh-modal-header {
