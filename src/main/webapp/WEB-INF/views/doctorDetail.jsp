@@ -18,7 +18,6 @@
 
 <script type="text/javascript">
 	$(function() {
-		let sessionId = '';
 		
 		/* 그래프 : hospitalDetail 참고 */
 		let verygood = parseInt(${reviewCount.veryGood});
@@ -44,7 +43,7 @@
 		let offsetSubMenu = $(".doctorBar").offset().top;
 		
 		/* 특정 div 위치에 도달시 서브 메뉴 바꾸기 */
-		let offsetIntroduce = $(".doctorInfoBox").offset().top - (18 * window.innerHeight / 100);
+		let offsetIntroduce = $(".scrollDoctor").offset().top - (18 * window.innerHeight / 100);
 		let offsetReview = $(".doctorReviewBox").offset().top - (18 * window.innerHeight / 100);
 		
 		$(window).scroll(function() {
@@ -59,10 +58,10 @@
 		    }
 			
 			/* 하이라이트 */
-		    if (scrollPos >= offsetMedical && scrollPos < offsetIntroduce) {
+		    if (scrollPos >= offsetIntroduce && scrollPos < offsetReview) {
 		        $('#subMenu1').addClass('selectOption').siblings().removeClass('selectOption');
 		    }
-		    if (scrollPos >= offsetHospital && scrollPos < offsetDoctor) {
+		    if (scrollPos >= offsetReview) {
 		        $('#subMenu2').addClass('selectOption').siblings().removeClass('selectOption');
 		    }
 		});
@@ -72,19 +71,18 @@
 		    let offset;
 		    
 		    if ($(this).text() == '소개') {
-		        offset = $(".doctorInfoBox").offset().top - (15 * window.innerHeight / 100);
+		        offset = $(".scrollDoctor").offset().top - (15 * window.innerHeight / 100);
 		    }  else {
-		        offset = $(".doctorReviewBox").offset().top - (18 * window.innerHeight / 100);
+		        offset = $(".doctorReviewBox").offset().top - (15 * window.innerHeight / 100);
 		    }
 		    $("html, body").animate({
 		        scrollTop: offset
 		    }, 450);
 		});
 		
-		sessionId = <%=session.getAttribute("mno")%>
 		/* 뒤로가기 버튼 */
 		$(document).on("click", ".xi-angle-left", function() {
-			history.back();
+			location.href = '/telehealth';
 		});
 
 		/* 병원 상세보기 이동 */
@@ -116,6 +114,7 @@
 
 		/* 정렬 */
 		$(document).on("click", ".sortReviewButton", function() {
+			$(this).addClass("selectedSort").siblings().removeClass("selectedSort");
 			let reviewKeyword = $(this).text().trim();
 			/* 최신 순 정렬 */
 			if (reviewKeyword === '최신 순') {
@@ -164,7 +163,7 @@
 
 		/* 리뷰 글쓴이 익명처리 */
 		$(".reviewName").each(function() {
-			let anonymousName = anonymous($(this).text());
+			let anonymousName = anonymous($(this).text().trim());
 			$(this).text(anonymousName);
 		})
 
@@ -172,7 +171,7 @@
 		$(document).on("click", ".recommend", function() {
 			let currentButton = $(this);
 			if (loginCheck()) {
-				let rno = $(this).parent().siblings(".rno").val();
+				let rno = $(this).parent().parent().siblings(".rno").val();
 				$.ajax({
 					url : "../reviewRecommend",
 					type : "post",
@@ -193,31 +192,56 @@
 		/* 내 글 삭제하기 */
 		$(document).on("click", ".delete", function() {
 			let currentDelete = $(this);
-			if (confirm("리뷰를 삭제하시겠습니까?")) {
-				let rno = $(this).siblings(".rno").val();
+			$(".dh-modal-delete").show();
+			let rno = $(this).parent().siblings(".rno").val();
+			let dno = $(".dno").val();
+			$(document).on("click", ".dh-delete-button", function() {
+				$(".dh-modal-delete").hide();
 				$.ajax({
 					url : "../reviewDelete",
 					type : "post",
 					dataType : "json",
 					data : {
-						rno : rno
+						rno : rno, dno : dno
 					},
 					success : function(data) {
-						currentDelete.parent(".reviewWriteBox").hide();
+						currentDelete.parent().parent(".reviewWriteBox").hide();
+						currentDelete.parent().parent().siblings('.reviewGrayLine').hide();
+						
+						$("#countReview").text(data.doctor.dReviewCount);
+						$("#subMenu2").text("리뷰("+data.doctor.dReviewCount+")");
+						$(".doctorReviewScore").text((data.doctor.dReviewAverage).toFixed(1));
+						
+						$(".dh-modal-text").text("리뷰가 삭제되었습니다.");
+						$("#dh-modal-alert").addClass("active").fadeIn();
+					    setTimeout(function() {
+					        $("#dh-modal-alert").fadeOut(function(){
+					            $(this).removeClass("active");
+					        });
+					    }, 1500);
+					    
 					},
 					error : function(error) {
 						alert("Error");
 					}
 				});
-			}
+			});
+		});
+		
+		$(document).on("click", ".dh-close-modal", function() {
+			$(".dh-modal-edit").hide();
+			$(".dh-modal-delete").hide();
 		});
 
 		/* 내 리뷰 수정하기 */
 		$(document).on("click", ".edit", function() {
-			if (confirm("리뷰를 수정하시겠습니까?")) {
-				$(this).siblings(".reviewEdit").show();
-				$(this).siblings(".reviewContent").hide();
-			}
+			let edit = $(this);
+			$(".dh-modal-edit").show();
+			$(document).on("click", ".dh-edit-button", function() {
+				$(".dh-modal-edit").hide();
+				edit.parent().siblings(".reviewEdit").show();
+				edit.parent().siblings(".reviewContent").hide();
+			});
 		});
 
 		/* 내 리뷰 수정해서 보여주기 */
@@ -237,6 +261,15 @@
 					currentEdit.siblings(".reviewContent").text(rcontent);
 					currentEdit.hide();
 					currentEdit.siblings(".reviewContent").show();
+					
+					$(".dh-modal-text").text("리뷰가 수정되었습니다.");
+					$("#dh-modal-alert").addClass("active").fadeIn();
+				    setTimeout(function() {
+				        $("#dh-modal-alert").fadeOut(function(){
+				            $(this).removeClass("active");
+				        });
+				    }, 1500);
+				    
 				},
 				error : function(error) {
 					alert("Error");
@@ -248,16 +281,34 @@
 		$(document).on("submit", "#telehealthApply", function(event) {
 			if (!loginCheck()) {
 				event.preventDefault();
+			} else if ( !($(this).hasClass("submit-btn-css")) ) {
+				event.preventDefault();
+				$(".dh-modal-text").text("진료가 불가능합니다.");
+				$("#dh-modal-alert").addClass("active").fadeIn();
+			    setTimeout(function() {
+			        $("#dh-modal-alert").fadeOut(function(){
+			            $(this).removeClass("active");
+			        });
+			    }, 1500);
 			}
 		});
-
+		
+		$(document).on("click", ".submit", function() {
+				$(".dh-modal-text").text("진료가 불가능합니다.");
+				$("#dh-modal-alert").addClass("active").fadeIn();
+			    setTimeout(function() {
+			        $("#dh-modal-alert").fadeOut(function(){
+			            $(this).removeClass("active");
+			        });
+			    }, 1500);
+		});
+		
 		/* 진료 중일 때만 비대면 진료하기 */
 		if ($(".application").length > 0) {
 			if ($(".doctorStatus_text").text() == '진료 중') {
-				$(".application").addClass("submit-btn-css").prop("disabled", false);;
-				$(".application").disabled(abled);
+				$(".application").addClass("submit-btn-css").prop("disabled", false);
 			} else {
-				$(".application").text("비대면 진료 종료").removeClass("submit-btn-css").prop("disabled", true);
+				$(".application").text("비대면 진료 종료").removeClass("submit-btn-css");
 			}
    	 	}
 		
@@ -265,13 +316,9 @@
 
 		/* 로그인 체크 */
 		function loginCheck() {
-			if (sessionId == 'null' || sessionId == '') {
-				if (confirm("로그인을 해야 이용할 수 있는 서비스입니다. 로그인 하시겠습니까?")) {
-					return location.href = './login';
+			if(${sessionScope.mno == null || sessionScope.mno == ''}){
+				$(".dh-modal-wrapper").show();
 				} else {
-					return false;
-				}
-			} else {
 				return true;
 			}
 		}
@@ -282,19 +329,22 @@
 			let firstName = '○'.repeat(name.length - 1);
 			return lastName + firstName;
 		}
+		
+		function confirmTrue() {
+	        return true;
+	    }
 	});
 </script>
 
 </head>
 <body>
-
+<%@ include file="loginAlert.jsp"%>
 	<!-- header -->
 	<header>
 		<i class="xi-angle-left xi-x"></i>
 		<div class="headerTitle">의사 정보</div>
 		<div class="blank"></div>
 	</header>
-
 	<!-- main -->
 	<main class="doctorContainerBox container">
 		<div class="doctorHeader">
@@ -403,7 +453,10 @@
 				</div>
 			</div>
 		</div>
+		
+		
 		<div class="graySeperate"></div>
+		
 		<!-- 의사 소개 -->
 		<div class="doctorBody">
 			<div class="doctorBar">
@@ -411,7 +464,7 @@
 				<div id="subMenu2" class="doctorBarIntroduce">리뷰(${doctor.dReviewCount})</div>
 			</div>
 			<div id="placeHolderDiv" style="height: 7vh; display: none;"></div>
-			<div class="doctorInfoBox">
+			<div class="doctorInfoBox scrollDoctor">
 				<div class="doctorTitle">의사 소개</div>
 				<div class="doctorIntroduce">
 					<h3>
@@ -447,128 +500,142 @@
 					</div>
 				</div>
 			</div>
-			<div class="graySeperate"></div>
+		</div>
+		<div class="graySeperate"></div>
 
 
-			<!-- 의사 리뷰 -->
-			<div class="doctorReviewBox doctorInfoBox">
-				<div class="doctorTitle">
-					리뷰<span> ${doctor.dReviewCount}</span>
+		<!-- 의사 리뷰 -->
+		<div class="doctorReviewBox doctorInfoBox">
+			<div class="doctorTitle">
+				리뷰<span id="countReview"> ${doctor.dReviewCount}</span>
+			</div>
+			<div class="reviewHeader">
+				<div class="doctorReviewScoreBoxLeft">
+					<div class="doctorReviewScore">${doctor.dReviewAverage}</div>
+					<div class="doctorReviewStar">
+						<c:forEach begin="1"
+							end="${fn:substringBefore(doctor.dReviewAverage, '.')}">
+							<span class="xi-star"></span>
+						</c:forEach>
+						<c:forEach begin="1"
+							end="${5 - fn:substringBefore(doctor.dReviewAverage, '.')}">
+							<span class="xi-star-o"></span>
+						</c:forEach>
+					</div>
 				</div>
-
-				<div class="reviewHeader">
-
-					<div class="doctorReviewScoreBoxLeft">
-						<div class="doctorReviewScore">${doctor.dReviewAverage}</div>
-						<div class="doctorReviewStar">
-							<c:forEach begin="1"
-								end="${fn:substringBefore(doctor.dReviewAverage, '.')}">
-								<span class="xi-star"></span>
-							</c:forEach>
-							<c:forEach begin="1"
-								end="${5 - fn:substringBefore(doctor.dReviewAverage, '.')}">
-								<span class="xi-star-o"></span>
-							</c:forEach>
+				<div class="bar-container">
+					<div class="count-container">
+						<span>매우 만족</span>
+						<div class="count-star" id="verygood-container">
+							<div class="bar" id="verygood-bar"></div>
 						</div>
 					</div>
-					<div class="bar-container">
-						<div class="count-container">
-							<span>매우 만족</span>
-							<div class="count-star" id="verygood-container">
-								<div class="bar" id="verygood-bar"></div>
-							</div>
-						</div>
 
-						<div class="count-container">
-							<span>만족</span>
-							<div class="count-star" id="good-container">
-								<div class="bar" id="good-bar"></div>
-							</div>
+					<div class="count-container">
+						<span>만족</span>
+						<div class="count-star" id="good-container">
+							<div class="bar" id="good-bar"></div>
 						</div>
-						<div class="count-container">
-							<span>보통</span>
-							<div class="count-star" id="normal-container">
-								<div class="bar" id="normal-bar"></div>
-							</div>
+					</div>
+					<div class="count-container">
+						<span>보통</span>
+						<div class="count-star" id="normal-container">
+							<div class="bar" id="normal-bar"></div>
 						</div>
-						<div class="count-container">
-							<span>불만족</span>
-							<div class="count-star" id="bad-container">
-								<div class="bar" id="bad-bar"></div>
-							</div>
+					</div>
+					<div class="count-container">
+						<span>불만족</span>
+						<div class="count-star" id="bad-container">
+							<div class="bar" id="bad-bar"></div>
 						</div>
-						<div class="count-container">
-							<span>매우 불만족</span>
-							<div class="count-star" id="verybad-container">
-								<div class="bar" id="verybad-bar"></div>
-							</div>
+					</div>
+					<div class="count-container">
+						<span>매우 불만족</span>
+						<div class="count-star" id="verybad-container">
+							<div class="bar" id="verybad-bar"></div>
 						</div>
 					</div>
 				</div>
-				<div class="doctorReviewWrite">
-					<form id="reviewWrite" action="/doctorDetail/${doctor.dno}"
-						method="post">
-						<button class="reviewWritePage">리뷰 작성</button>
-					</form>
-				</div>
-
 			</div>
-			<div class="sortReview">
-				<button type="button" class="sortReviewButton">최신 순</button>
-				<button type="button" class="sortReviewButton">오래된 순</button>
-				<button type="button" class="sortReviewButton">별점 높은 순</button>
-				<button type="button" class="sortReviewButton">별점 낮은 순</button>
-			</div>
+		<div class="doctorReviewWrite">
+			<form id="reviewWrite" action="/doctorDetail/${doctor.dno}" method="post">
+				<button class="reviewWritePage">리뷰 작성</button>
+			</form>
+		</div>
+		<div class="graySeperate"></div>
+	
+		
+		<!-- 리뷰 정렬 -->
+		<div class="sortReview">
+			<button type="button" class="sortReviewButton selectedSort">최신 순</button>
+			<button type="button" class="sortReviewButton">오래된 순</button>
+			<button type="button" class="sortReviewButton">별점 높은 순</button>
+			<button type="button" class="sortReviewButton">별점 낮은 순</button>
+		</div>
+		<div class="grayLine"></div>
 			
-			<div class="grayLine"></div>
-			
-			<div class="reviewBox">
-				<c:forEach items="${doctorReview}" var="row">
-					<div class="reviewWriteBox">
-						<input class="rno" value="${row.rno}" type="hidden">
-						<div class="reviewStar">
-							<c:forEach begin="1" end="${row.rrate}">
-								<span class="xi-star"></span>
-							</c:forEach>
-							<c:forEach begin="1" end="${5 - row.rrate}">
-								<span class="xi-star-o"></span>
-							</c:forEach>
-						</div>
-						<c:if test="${sessionScope.mno == row.mno}">
-							<div class="delete">
-								<img src="../img/trash.png" style="width: 5%">
-							</div>
+		<div class="reviewBox">
+			<c:forEach items="${doctorReview}" var="row">
+				<div class="reviewWriteBox">
+					<input class="rno" value="${row.rno}" type="hidden">
+					
+					<!-- 리뷰 별점 -->
+					<div class="reviewStar">
+						<c:forEach begin="1" end="${row.rrate}">
+							<span class="xi-star xi-x"></span>
+						</c:forEach>
+						<c:forEach begin="1" end="${5 - row.rrate}">
+							<span class="xi-star-o xi-x"></span>
+						</c:forEach>
+						<span class="rateInt">${row.rrate}</span>
+					</div>
+					
+					<!-- 수정 삭제 -->
+					<c:if test="${sessionScope.mno == row.mno}">
+						<div class="editReviewBox">
 							<div class="edit">
-								<img src="../img/edit.png" style="width: 5%">
+								<img src="https://cdn-icons-png.flaticon.com/512/10629/10629723.png" style="width: 18px">
 							</div>
-						</c:if>
-						
-						<div class="reviewKeyword">
-							<c:forEach items="${row.rkeyword.split(',')}" var="keyword">
-								<div class="keyword"># ${keyword}</div>
-							</c:forEach>
+							<div class="delete">
+								<img src="../img/trash.png" style="width: 18px">
+							</div>
 						</div>
-						<div class="reviewContent">${row.rcontent}</div>
-						<div class="reviewEdit">
-							<input value="${row.rcontent}" class="reviewEditWrite">
-							<button type="button" class="editButton">수정</button>
+					</c:if>
+					
+					<!-- 리뷰 키워드 -->
+					<div class="reviewKeyword">
+						<c:forEach items="${row.rkeyword.split(',')}" var="keyword">
+							<div class="keyword"># ${keyword}</div>
+						</c:forEach>
+					</div>
+					
+					<!-- 리뷰 내용 -->
+					<div class="reviewContent">${row.rcontent}</div>
+					<!-- 리뷰 수정 페이지 -->
+					<div class="reviewEdit">
+						<input value="${row.rcontent}" class="reviewEditWrite">
+						<button type="button" class="editButton">수정</button>
+					</div>
+					<div class="reviewFooter">
+						<!-- 작성일/작성자 -->
+						<div class="writerBox">
+							<div class="reviewDate">${row.rdate}</div>
+							<input class="dateTime" type="hidden" value="${row.rdate}">
+							<div class="reviewName margin-left">${row.mname}</div>
 						</div>
-						<div class="reviewDate">${row.rdate}</div>
-						<input class="dateTime" type="hidden" value="${row.rdate}">
-						<div class="reviewName">${row.mname}</div>
+						<!-- 좋아요 -->
 						<div class="reviewLike">
 							<button class="recommend">
-								<img src="../img/thumbs_up.png" style="width: 10%;"><span
-									class="likeUp">${row.rlike}</span>
+								<img src="../img/thumbs_up.png" style="width: 18px">&nbsp;&nbsp;<span class="likeUp">${row.rlike}</span>개
 							</button>
 						</div>
-						<hr>
-						<!-- 나중에 지울 것 -->
 					</div>
-				</c:forEach>
-			</div>
+				</div>
+				<div class="reviewGrayLine"></div>
+			</c:forEach>
 		</div>
 	</div>
+	<div style="height: 7vh"></div>
 	</main>
 	
 	<form id="telehealthApply" action="/telehealthApply" method="get">
@@ -578,11 +645,57 @@
 				<button class="submit" type="button">비대면 진료 불가</button>
 			</c:when>
 			<c:otherwise>
-				<input name="dno" type="hidden" value="${doctor.dno}">
-				<button class="submit application" disabled="disabled">비대면 진료 신청</button>
+				<input name="dno" class="dno" type="hidden" value="${doctor.dno}">
+				<button class="submit application">비대면 진료 신청</button>
 			</c:otherwise>
 		</c:choose>
 	</footer>
 	</form>
+	
+	<!-- 확인 알림창 모달 -->
+	<div class="dh-modal-delete" style="display: none">
+		<div class="dh-modal-login">
+			<div class="dh-modal-header">
+				<div class="dh-modal-body">
+					<span class="h4">리뷰를 삭제하시겠습니까?
+					</span>
+				</div>
+			</div>
+			<div class="dh-modal-footer">
+				<button class="dh-modal-button dh-close-modal">취소</button>
+				<button class="dh-modal-button dh-delete-button">확인</button>
+			</div>
+		</div>
+	</div>
+	
+	<div class="dh-modal-edit" style="display: none">
+		<div class="dh-modal-login">
+			<div class="dh-modal-header">
+				<div class="dh-modal-body">
+					<span class="h4">리뷰를 수정하시겠습니까?
+					</span>
+				</div>
+			</div>
+			<div class="dh-modal-footer">
+				<button class="dh-modal-button dh-close-modal">취소</button>
+				<button class="dh-modal-button dh-edit-button">확인</button>
+			</div>
+		</div>
+	</div>
+	
+	<!-- 알림창 -->
+	<div id="dh-modal-alert">
+		<div class="dh-modal">
+			<div class="dh-modal-content">
+				<div class="dh-modal-title">
+					<img class="dh-alert-img" src="https://cdn-icons-png.flaticon.com/512/6897/6897039.png">
+					알림
+				</div>
+				<div class="dh-modal-text">내용을 입력해 주세요.</div>
+			</div>
+		</div>
+		<div class="dh-modal-blank"></div>
+	</div>
+	
 </body>
 </html>

@@ -34,7 +34,6 @@
 	/* 로그인 확인 */
 	function link(url) {
 		if(${sessionScope.mno == null || sessionScope.mno == ''}){
-
 			$(".dh-modal-wrapper").show();
 		} else {
 			$(".dh-modal-wrapper").hide();
@@ -83,7 +82,7 @@
 							<div class="ham-noUser">
 								<button
 									onclick="link('docReception/${sessionScope.mno}/${sessionScope.dno}')"
-									style="width: 133px;">비대면 진료 관리</button>
+									style="width: 140px;">비대면 진료 관리</button>
 							</div>
 						</div>
 					</c:when>
@@ -110,7 +109,7 @@
 										src="https://cdn-icons-png.flaticon.com/512/9005/9005933.png">
 								</div>
 								<div class="ham-admin-button">
-									<button onclick="link('admin/newHospital')">병원 관리</button>
+									<button onclick="link('admin/hospitalOpen')">병원 관리</button>
 								</div>
 							</div>
 							<div class="ham-buttonSubItem-admin">
@@ -138,7 +137,7 @@
 								</div>
 							</c:when>
 							<c:otherwise>
-								<div class="ham-menu ham-noUser">
+								<div class="ham-menu">
 									<div class="ham-userImg">
 										<img src="${userInfo.mimg}">
 									</div>
@@ -168,7 +167,7 @@
 									<img
 										src="https://cdn-icons-png.flaticon.com/512/881/881760.png ">
 								</div>
-								<div class="ham-buttonText">건강관리</div>
+								<div class="ham-buttonText">건강 기록</div>
 							</div>
 							<div class="ham-buttonSubItem"
 								onclick="link('myWriting/${sessionScope.mno}')">
@@ -184,7 +183,7 @@
 									<img
 										src="https://cdn-icons-png.flaticon.com/512/11411/11411453.png">
 								</div>
-								<div class="ham-buttonText">예약 내역</div>
+								<div class="ham-buttonText">진료 내역</div>
 							</div>
 						</div>
 					</c:otherwise>
@@ -231,25 +230,20 @@
 							style="width: 28px; margin-right: 8px;">진료
 					</div>
 					<div class="ham-sectionList">
-						<div class="ham-listRow"
-							onclick="link('medicalHistory/${sessionScope.mno}')">
-							<div class="ham-listTitle">진료 내역</div>
-							<div class="xi-angle-right-min"></div>
-						</div>
 						<div class="ham-listRow" onclick="noCheckLink('search')">
-							<div class="ham-listTitle">병원 예약</div>
+							<div class="ham-listTitle">병원 검색 및 예약</div>
 							<div class="xi-angle-right-min"></div>
 						</div>
 						<div class="ham-listRow" onclick="noCheckLink('telehealthSearch')">
-							<div class="ham-listTitle">비대면 진료</div>
+							<div class="ham-listTitle">비대면 진료 검색</div>
 							<div class="xi-angle-right-min"></div>
 						</div>
 						<div class="ham-listRow" onclick="link('chatting')">
-							<div class="ham-listTitle">실시간 상담</div>
+							<div class="ham-listTitle">실시간 채팅</div>
 							<div class="xi-angle-right-min"></div>
 						</div>
 						<div class="ham-listRow" onclick="noCheckLink('hospitalMap')">
-							<div class="ham-listTitle">주변 병원</div>
+							<div class="ham-listTitle">주변 병원 및 약국</div>
 							<div class="xi-angle-right-min"></div>
 						</div>
 					</div>
@@ -263,10 +257,10 @@
 					</div>
 					<div class="ham-sectionList">
 						<div class="ham-listRow" onclick="noCheckLink('qnaBoard')">
-							<div class="ham-listTitle">Q&A 게시판</div>
+							<div class="ham-listTitle">커뮤니티</div>
 							<div class="xi-angle-right-min"></div>
 						</div>
-						<div class="ham-listRow" onclick="noCheckLink('hospitalOpen')">
+						<div class="ham-listRow" onclick="noCheckLink('newHospital')">
 							<div class="ham-listTitle">신규 병원 등록</div>
 							<div class="xi-angle-right-min"></div>
 						</div>

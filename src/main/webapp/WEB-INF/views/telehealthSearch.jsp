@@ -20,7 +20,7 @@
 
 		/* 뒤로가기 버튼 */
 		$(document).on("click", ".xi-angle-left", function() {
-			history.back();
+			location.href = '/main';
 		});
 
 		$(".seletedDepartmentBox").show();
