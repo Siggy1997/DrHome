@@ -8,7 +8,8 @@
 <head>
 <meta charset="UTF-8">
 
-<meta name="viewport" content="initial-scale=1, width=device-width, user-scalable=no"/> 
+<meta name="viewport"
+	content="initial-scale=1, width=device-width, user-scalable=no" />
 
 <link rel="stylesheet" href="./css/pharmacyMap.css">
 
@@ -22,7 +23,7 @@
 
 
 
-<title>Insert title here</title>
+<title></title>
 
 <style>
 </style>
@@ -31,10 +32,7 @@
 <body>
 
 	<header>
-
-		 <i class="xi-angle-left xi-x" onclick="location.href = '/main'"></i>
-
-
+		<i class="xi-angle-left xi-x" onclick="location.href = '/main'"></i>
 		<div id="searchContainer">
 			<input type="text" id="searchInput" placeholder="약국 이름 검색">
 			<button id="searchButton">검색</button>
@@ -42,12 +40,9 @@
 	</header>
 	<main>
 
-
-
 		<button onclick="location.href='/hospitalMap';" id="hospitalMap">
 			병원<br>지도
 		</button>
-
 
 		<button onclick="refreshPage()" id="currentLocation"
 			class="xi-gps xi-x"></button>
@@ -86,9 +81,6 @@ function refreshPage() {
     newDiv.style.boxShadow = "0px 4px 4px rgba(0, 0, 0, 0.25)";
     newDiv.style.borderRadius = "20px";
  
-    
-    
-    // body의 맨 뒤에 동적으로 생성한 div 추가
     document.body.appendChild(newDiv);
 </script>
 
@@ -100,11 +92,8 @@ function refreshPage() {
 	src="//dapi.kakao.com/v2/maps/sdk.js?appkey=80e6cca959046a32e36bfd9340bd8485"></script>
 
 
-
-
-
 <script>
-var map; // map 변수를 전역 범위에서 정의
+var map;
 
 document.addEventListener("DOMContentLoaded", function () {
     var dynamicContainer = document.getElementById("infoDiv");
@@ -143,7 +132,7 @@ document.addEventListener("DOMContentLoaded", function () {
            
             var circle;
 
-         // 원을 그리는 함수
+         // 현위치 표시
             function drawCircle() {
                 var currentLevel = map.getLevel();
                 // 확대 레벨에 따라 반지름을 조절
@@ -157,9 +146,9 @@ document.addEventListener("DOMContentLoaded", function () {
                     center: new kakao.maps.LatLng(lat, lon),
                     radius: radius,
                     strokeWeight: 2,
-                    strokeColor: 'skyblue',
+                    strokeColor: '#00C9FF',
                     strokeOpacity: 0.7,
-                    fillColor: 'skyblue',
+                    fillColor: '#00C9FF',
                     fillOpacity: 0.3
                 });
 
@@ -190,9 +179,7 @@ document.addEventListener("DOMContentLoaded", function () {
             level: 5 
         };
 
-        // 지도
         map = new kakao.maps.Map(mapContainer, mapOption);
-
 
         // 장소의 상세정보
         var placeOverlay = new kakao.maps.CustomOverlay({ zIndex: 1 }),
@@ -248,13 +235,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
      // 검색 버튼 클릭
         searchButton.addEventListener('click', function () {
-            // 검색어 가져오기
+
             var keyword = searchInput.value.trim();
 
-            // 결과 리스트 초기화
             searchResults.innerHTML = '';
 
-            // 검색어가 비어있으면 아무 작업도 수행하지 않음
             if (!keyword) {
                 return;
             }
@@ -262,7 +247,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             pharmacies.forEach(function (pharmacy) {
                 if (pharmacy.title.includes(keyword)) {
-                    // 검색어가 일치하는 경우 결과 리스트에 추가
+
                     var listItem = document.createElement('li');
                     listItem.textContent = pharmacy.title;
 
@@ -273,29 +258,23 @@ document.addEventListener("DOMContentLoaded", function () {
                             if (status === kakao.maps.services.Status.OK) {
                                 var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
 
-
                                 map.panTo(coords);
 
-  
-                                simulateMarkerClick(pharmacy);
                             }
                         });
                     });
                  
-                 // 리스트 아이템에 간격 추가
+
                    listItem.style.marginTop = '5px';
                    listItem.style.marginBottom = '5px';
                     listItem.style.fontSize = '16px';
                     listItem.style.borderBottom = '1px solid lightgray'; 
                     listItem.style.padding = '2%';
 
-                 
-                    // 리스트 아이템을 결과 리스트에 추가
                     searchResults.appendChild(listItem);
                 }
             });
 
-            // 검색 결과가 있을 때만 결과 리스트를 보이도록 설정
             if (searchResults.children.length > 0) {
                 searchResults.style.display = 'block';
             } else {
@@ -327,9 +306,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if(currentDay == 0 || currentDay == 6) {
             
             		 return "휴업일";
-
             } else {          	
-            	
                          if (currentTime >= openMinutes && currentTime <= closeMinutes) {
                              return "영업중";
                          } else { 
@@ -380,23 +357,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 '</div>';
 
 
-            // 컨테이너를 표시
             dynamicContainer.style.display = 'block';
              
             var currentLocationButton = document.getElementById('currentLocation');
             currentLocationButton.style.bottom = '160px';
-        }
-        
-     // 마커를 찾아서 클릭한 것처럼
-        function simulateMarkerClick(pharmacy) {
-        	pharmacies.forEach(function (pharmacyMarker) {
-                if (pharmacyMarker.title === pharmacy.title) {
-                    // 마커 클릭 이벤트
-                    kakao.maps.event.trigger(pharmacyMarker.marker, 'click');
-
-                    handleMarkerClick(pharmacy);
-                }
-            });
         }
         
 
@@ -407,8 +371,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (status === kakao.maps.services.Status.OK) {
                     var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
 
-                    
-
                     var imageSrc = '/img/pharmacyMarker.png',     
                         imageSize = new kakao.maps.Size(32, 37), 
                         imageOption = {offset: new kakao.maps.Point(30, 30)}; 
@@ -416,22 +378,17 @@ document.addEventListener("DOMContentLoaded", function () {
                     
                     var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption)
                  
-                    
-                    // 위치 마커
                     var marker = new kakao.maps.Marker({
                         map: map,
                         position: coords,
                         image: markerImage
                     });
-
                     
                     // 마커 클릭
                     kakao.maps.event.addListener(marker, 'click', function () {
                         handleMarkerClick(position);
                     });
 
-
-                    // 지도를 클릭했을 때 컨테이너 숨김
                     kakao.maps.event.addListener(map, 'click', function (mouseEvent) {
                         
                         if (!mouseEvent.target || !mouseEvent.target.toString().includes('Marker')) {
@@ -448,7 +405,6 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         });
     }
-   
    
    
   })();
