@@ -22,7 +22,7 @@
 	
 <header>
      <i class="xi-angle-left xi-x" onclick="location.href = '/qnaBoard'"></i>
-    <div class="header title">상담하기</div>
+    <div class="headerTitle">상담하기</div>
     <div class="blank"></div>
 </header>
 
@@ -37,58 +37,20 @@
 		<div class="bdate">${qnaQuestion.bdate}</div>
 		
 			<c:if test="${qnaQuestion.mno ne mno}">
-		<img id="reportButton" src='/img/siren.png'/>
+		<img id="reportButton" src='https://cdn-icons-png.flaticon.com/512/2760/2760618.png'/>
 	</c:if>
-		
-
+	<div class="line"></div>
 		
 		<div class="bdetail">${qnaQuestion.bcontent}</div>
-	
-		
+			<div class="line"></div>	
+			
+			<div class="kindLike">
 		 <c:if test="${qnaQuestion.dpkind ne 'unknown'}">
-		<div class="dpkind">${qnaQuestion.dpkind}</div>
+		<div class="dpkind">#&nbsp ${qnaQuestion.dpkind}</div>
 		 </c:if>
-	</div>
-
-
-
-<!-- 신고하기 모달 -->
-	<div id="reportModal" class="modal">
-		<div class="modal-content">
-			<span class="close" id="closeModal">&times;</span>
-			<h2>신고하기</h2>
-			<form action="/reportPost" method="post" id="reportForm">
-				<input type="hidden" name="rpdate" id="rpdate"> <input
-					type="hidden" name="bno" id="bno" value="${qnaQuestion.bno}">
-				<textarea rows="5" cols="13" name="rpcontent" id="rpcontent"
-				placeholder="신고사유를 작성해주세요."></textarea>
-				<button type="submit" id="submitReport">신고하기</button>
-			</form>
-
-		</div>
-	</div>
-
-
-	<c:if test="${isDibsTrue eq false}">
-		<form id="callDibsForm" action="/qnaCallDibs" method="POST">
-			<input type="hidden" id="callDibsInput" name="callDibsInput"
-				value="false"> <input type="hidden" name="bno" id="bno"
-				value="${qnaQuestion.bno}">
-			<button type="submit" id="dibsButtonFalse">☆ 찜하기</button>
-		</form>
-	</c:if>
-
-	<c:if test="${isDibsTrue eq true}">
-		<form id="callDibsForm" action="/qnaCallDibs" method="POST">
-			<input type="hidden" id="callDibsInput" name="callDibsInput"
-				value="true"> <input type="hidden" name="bno" id="bno"
-				value="${qnaQuestion.bno}">
-			<button type="submit" id="dibsButtonTrue">★ 찜하기</button>
-		</form>
-	</c:if>
-
-
-  <div class="button-container right">
+		 
+		 
+		   <div class="button-container right">
 <c:if test="${qnaQuestion.mno eq mno}">
 <form id="requestEditForm" action="/editQna" method="POST">
 <input type="hidden" name="bno" id="bno"
@@ -110,6 +72,121 @@
 		</form>
 	</c:if>
 </div>
+		 
+		 
+		 <c:if test="${isDibsTrue eq false}">
+		<form id="callDibsForm" action="/qnaCallDibs" method="POST">
+			<input type="hidden" id="callDibsInput" name="callDibsInput"
+				value="false"> <input type="hidden" name="bno" id="bno"
+				value="${qnaQuestion.bno}">
+			<button type="submit" id="dibsButtonFalse">공감&nbsp&nbsp<i class="xi-heart-o"></i></button>
+		</form>
+	</c:if>
+
+	<c:if test="${isDibsTrue eq true}">
+		<form id="callDibsForm" action="/qnaCallDibs" method="POST">
+			<input type="hidden" id="callDibsInput" name="callDibsInput"
+				value="true"> <input type="hidden" name="bno" id="bno"
+				value="${qnaQuestion.bno}">
+			<button type="submit" id="dibsButtonTrue">공감&nbsp&nbsp<i class="xi-heart"></i></button>
+		</form>
+	</c:if>
+		 </div>
+		 
+		 
+	</div>
+
+
+
+<!-- 신고하기 모달 -->
+	<div id="reportModal" class="modal">
+		<div class="modal-content">
+			<span class="close" id="closeModal">&times;</span>
+			<h2>신고하기</h2>
+			<form action="/reportPost" method="post" id="reportForm">
+				<input type="hidden" name="rpdate" id="rpdate"> <input
+					type="hidden" name="bno" id="bno" value="${qnaQuestion.bno}">
+				<textarea rows="5" cols="13" name="rpcontent" id="rpcontent"
+				placeholder="신고사유를 작성해주세요."></textarea>
+				<button type="submit" id="submitReport">신고하기</button>
+			</form>
+
+		</div>
+	</div>
+
+
+	
+
+
+
+
+	<c:if test="${not empty dno}">
+		<button type="button" id="answerToggleButton">답변 작성하기</button>
+	</c:if>
+
+	<div id="formContainer" style="display: none;">
+		<form action="./writeQnaAnswer" method="post" id="qnaAnswerForm">
+			<div>
+	
+				<textarea rows="5" cols="13" name="ccontent" id="ccontent"
+					style="display: none;"></textarea>
+			</div>
+			<input type="hidden" name="cdate" id="cdate"> <input
+				type="hidden" name="bno" id="bno" value="${qnaQuestion.bno}">
+				<div class="buttonBox">
+			<button type="button" id="cancelAnswerButton">취소</button>
+			<button type="submit" id="submitAnswerButton">완료</button>
+			</div>
+		</form>
+	</div>
+	</div>
+	<div class="graySeperate"></div>
+
+
+		<c:forEach items="${qnaAnswer}" var="answer">
+	<div class="answerTitle">
+	<div class="space doctorAnswer">
+	<img src='https://cdn-icons-png.flaticon.com/512/3304/3304567.png' />
+	의료인 답변
+	<div class="cdate">${answer.cdate}</div></div></div>
+	
+	<div class="space">
+	<div class="answer">
+			<input type="hidden" name="hospitalNum" value="${answer.hno}">
+			<input type="hidden" name="doctorNum" value="${answer.dno}">
+			
+			<div class="cdetail">${answer.ccontent}</div>
+			<div class="cContainer">
+			
+			
+			<c:if test="${answer.dno eq dno}">
+				<form action="deleteQnaAnswer" method="post" id="deleteQnaAnswer">
+					<input type="hidden" name="cno" id="cno" value="${answer.cno}">
+					<input type="hidden" name="bno" id="bno" value="${qnaQuestion.bno}">
+					<button class="xi-trash-o xi-x" id="cDeleteButton"></button>
+				</form>
+			</c:if>
+					</div>
+	</div>
+	</div>
+	
+			<c:forEach items="${doctorInfo}" var="doctor">
+			   <c:if test="${doctor.dno eq answer.dno}">
+	<div class="space">
+			   <div class="line"></div>
+	<div class="doctor" onclick="location.href='/doctorDetail/${doctor.dno}'">
+				<img class="doctorImg" src="${doctor.dimg}" alt="의사 이미지" height="75">
+			   <div class="doctorInfo">
+				<div class="doctorName">${doctor.dname} 의사</div>
+				<div class="doctorDpkind">${doctor.dpkind}</div>
+				<div class="hospital">${doctor.hname}</div>
+				</div>
+				</div>
+				</div>
+				<div class="cinfoLine_bottom"></div>
+				 </c:if>
+			</c:forEach>
+		</c:forEach>
 
 
 <!-- 삭제 확인 모달 -->
@@ -126,68 +203,6 @@
 			</div>
 		</div>
      </div>
-
-
-	<c:if test="${not empty dno}">
-		<button type="button" id="answerToggleButton">답변 작성하기</button>
-	</c:if>
-
-	<div id="formContainer" style="display: none;">
-		<form action="./writeQnaAnswer" method="post" id="qnaAnswerForm">
-			<div>
-	
-				<textarea rows="5" cols="13" name="ccontent" id="ccontent"
-					style="display: none;"></textarea>
-			</div>
-			<input type="hidden" name="cdate" id="cdate"> <input
-				type="hidden" name="bno" id="bno" value="${qnaQuestion.bno}">
-			<button type="button" id="cancelAnswerButton">취소</button>
-			<button type="submit" id="submitAnswerButton">완료</button>
-		</form>
-	</div>
-	</div>
-
-
-	<div class="answerTitle"><div class="space">의료인 답변</div></div>
-	
-		<c:forEach items="${qnaAnswer}" var="answer">
-	<div class="space">
-	<div class="answer">
-			<input type="hidden" name="hospitalNum" value="${answer.hno}">
-			<input type="hidden" name="doctorNum" value="${answer.dno}">
-			
-			<div class="cdetail">${answer.ccontent}</div><br>
-			<div class="cContainer">
-			<div class="cdate">${answer.cdate}</div>
-			
-			<c:if test="${answer.dno eq dno}">
-				<form action="deleteQnaAnswer" method="post" id="deleteQnaAnswer">
-					<input type="hidden" name="cno" id="cno" value="${answer.cno}">
-					<input type="hidden" name="bno" id="bno" value="${qnaQuestion.bno}">
-					<button class="xi-trash-o xi-x" id="cDeleteButton" class="cdelete"></button>
-				</form>
-			</c:if>
-					</div>
-	</div>
-	</div>
-	
-			<c:forEach items="${doctorInfo}" var="doctor">
-			   <c:if test="${doctor.dno eq answer.dno}">
-	<div class="space">
-	<div class="doctor" onclick="location.href='/doctorDetail/${doctor.dno}'">
-			   			<div class="cinfoLine_top"></div>
-				<img class="doctorImg" src="${doctor.dimg}" alt="의사 이미지" height="75">
-			   <div class="doctorInfo">
-				<div class="doctorName">${doctor.dname} 의사</div>
-				<div class="doctorDpkind">${doctor.dpkind}</div>
-				<div class="hospital">${doctor.hname}</div>
-				</div>
-				</div>
-				</div>
-				<div class="cinfoLine_bottom"></div>
-				 </c:if>
-			</c:forEach>
-		</c:forEach>
 
 
 <!-- 로그인 알림 -->
@@ -207,6 +222,19 @@
 		</div>
      </div>
 
+     	<!-- 댓글 알림 -->
+     <div id="dh-modal-alert">
+		<div class="dh-modal">
+			<div class="dh-modal-content">
+				<div class="dh-modal-title">
+					<img class="dh-alert-img" src="https://cdn-icons-png.flaticon.com/512/6897/6897039.png">
+					알림
+				</div>
+				<div class="dh-modal-text">내용을 입력해주세요.</div>
+			</div>
+		</div>
+		<div class="dh-modal-blank"></div>
+	</div>
 
 
 
@@ -215,6 +243,82 @@
 </main>
 </body>
 	<script>
+	$("#dh-modal-alert").hide();
+	
+	//로그인 모달
+	$(".dh-modal-wrapper").hide();
+	$(document).on("click", ".dh-close-modal", function(){
+		$(".dh-modal-wrapper").hide();
+	});
+
+	//질문 삭제 모달
+	$(".del-modal-wrapper").hide();
+
+	$(document).on("click", "#deleteButton", function(event) {
+	    event.preventDefault();
+	    
+	    $(".del-modal-wrapper").show();
+	    $(".del-modal-wrapper .h3").text("삭제하시겠습니까?");
+	    $(".del-modal-button-yes").on("click", function() {
+	        
+	        $("#deleteQnaQuestion").submit();
+	    });
+
+	    $(document).on("click", ".del-modal-button-no", function() {
+	        $(".del-modal-wrapper").hide();
+	    });
+	});
+	
+	//질문 수정 모달
+	$(document).on("click", "#editButton", function(event) {
+	    event.preventDefault();
+	    
+	    $(".del-modal-wrapper").show();
+	    $(".del-modal-wrapper .h3").text("수정하시겠습니까?");
+	    $(".del-modal-button-yes").on("click", function() {
+	        
+	        $("#requestEditForm").submit();
+	    });
+
+	    $(document).on("click", ".del-modal-button-no", function() {
+	        $(".del-modal-wrapper").hide();
+	    });
+	});
+	
+	//댓글 삭제 모달
+	$(".del-modal-wrapper").hide();
+
+	$(document).on("click", "#cDeleteButton", function(event) {
+	    event.preventDefault();
+	    
+	    $(".del-modal-wrapper").show();
+	    $(".del-modal-wrapper .h3").text("삭제하시겠습니까?");
+	    $(".del-modal-button-yes").on("click", function() {
+	        
+	        $("#deleteQnaAnswer").submit();
+	    });
+
+	    $(document).on("click", ".del-modal-button-no", function() {
+	        $(".del-modal-wrapper").hide();
+	    });
+	});
+	
+	
+	// 이름 익명처리
+	$(document).ready(function() {
+	    var mnameElements = document.getElementsByClassName('mname');
+	    
+	    for (var i = 0; i < mnameElements.length; i++) {
+	        var originalText = mnameElements[i].innerText;
+
+	        if (originalText.length >= 2) {
+	            var shortenedText = originalText.charAt(0) + 'O'.repeat(originalText.length - 1);
+	            mnameElements[i].innerText = shortenedText;
+	        }
+	    }
+	});
+	
+	
 		//날짜, 시간 변환하기
 		function updateDate(element, dateString) {
 			const postTime = new Date(dateString);
@@ -282,14 +386,33 @@
 							document.getElementById('formContainer').style.display = 'none';
 						});
 
-		function deleteConfirm() {
-			if (confirm("삭제하시겠습니까?")) {
-				return true;
-			} else {
-				event.preventDefault();
-			}
-		}
+		
+		
+		//본문 줄바꿈 적용
+		const bcontent = `${qnaQuestion.bcontent}`; 
+		const formattedContent = bcontent.replace(/\r?\n/g, '<br>');
+		document.querySelector('.bdetail').innerHTML = formattedContent;
+	
+		  const cdetailElements = document.querySelectorAll('.cdetail');
+    cdetailElements.forEach((element) => {
+        const ccontent = element.innerHTML;
+        const formattedContent = ccontent.replace(/\r?\n/g, '<br>');
+        element.innerHTML = formattedContent;
+    });
+		
+		
+		
+		//찜버튼 유효성검사
+		document.getElementById("dibsButtonFalse").addEventListener("click", function (event) {
+    const mno = "${mno}";
 
+    if (mno === null || mno === undefined || mno === "") {
+    	
+    	event.preventDefault();
+
+        $(".dh-modal-wrapper").show();
+    }
+});
 		
 		// 신고 버튼 클릭 시 모달 열기
 		document.getElementById("reportButton").addEventListener("click", function() {
@@ -304,7 +427,16 @@
 		        const reportCount = ${reportCount};
 		        
 		        if (reportCount !== 0) {
-		            alert("이미 신고한 게시물입니다.");
+		        	
+		        	 $("#dh-modal-alert").addClass("active").fadeIn();
+		        	    $("#dh-modal-alert .dh-modal-text").text("이미 신고한 게시글입니다.");
+		        	    setTimeout(function() {
+		        	        $("#dh-modal-alert").fadeOut(function(){
+		        	            $(this).removeClass("active");
+		        	        });
+		        	    }, 1000);
+		            
+		            
 		        } else {
 		            document.getElementById("reportModal").style.display = "block";
 		        }
@@ -327,60 +459,8 @@
 			}
 		});
 		
-		
-		
-		//찜버튼 유효성검사
-		document.getElementById("dibsButtonFalse").addEventListener("click", function (event) {
-    const mno = "${mno}";
-
-    if (mno === null || mno === undefined || mno === "") {
-    	
-    	event.preventDefault();
-        $(".dh-modal-wrapper").show();
-    }
-});
-		
-		// 이름 익명처리
-		document.addEventListener('DOMContentLoaded', function() {
-		    var mnameElements = document.getElementsByClassName('mname');
-		    
-		    for (var i = 0; i < mnameElements.length; i++) {
-		        var originalText = mnameElements[i].innerText;
-
-		        if (originalText.length >= 2) {
-		            var shortenedText = originalText.charAt(0) + 'O'.repeat(originalText.length - 1);
-		            mnameElements[i].innerText = shortenedText;
 	
-		        }
-		    }
-		});
-		
-		
-			//로그인 모달
-			$(".dh-modal-wrapper").hide();
-			$(document).on("click", ".dh-close-modal", function(){
-				$(".dh-modal-wrapper").hide();
-			});
-
-
 			
-			//질문 삭제 모달
-			$(".del-modal-wrapper").hide();
-
-			$(document).on("click", "#deleteButton", function(event) {
-			    event.preventDefault();
-			    
-			    $(".del-modal-wrapper").show();
-
-			    $(".del-modal-button-yes").on("click", function() {
-			        
-			        $("#deleteQnaQuestion").submit();
-			    });
-
-			    $(document).on("click", ".del-modal-button-no", function() {
-			        $(".del-modal-wrapper").hide();
-			    });
-			});
 	</script>	
 
 

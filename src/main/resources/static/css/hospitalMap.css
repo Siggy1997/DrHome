@@ -121,9 +121,12 @@ main {
   .info .desc {position: absolute;margin: 5px 0 0 100px; bottom:30%;}
       .info .availableDot {position: absolute; right:35%; bottom:31%; color: #0091FF; font-size: small;}
     .info .unavailableDot {position: absolute; right:35%; bottom:31%; color: #9E9E9E; font-size: small;}
+    .info .ellipsis {font-size:small;}
       .info .img {position: absolute; left: 5%;width: 73px;height: 71px;border: 1px solid #ddd;color: #888;overflow: hidden; bottom:30%;}
   .info .status {position: absolute;margin: 10px 10px 0 250px; bottom:30%;}
   
+  
+
 #searchInput {
   position: absolute;
     top: 22%;
@@ -162,9 +165,9 @@ main {
     padding: 0;
     margin: 0;
     background-color: white;
-    border: 1px solid lightgrey;
+    border-bottom: 1px solid lightgrey;
     display: none;
-    max-height: 200px;
+    max-height: 210px;
     overflow-y: auto;
     z-index: 1000; 
 }
@@ -172,7 +175,7 @@ main {
  
      #map {
     width: 100%;
-    height: 700px;
+    height: 705px;
     position: absolute;
     top: 0;
     left: 0;
