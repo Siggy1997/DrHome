@@ -12,6 +12,7 @@
 <title>DocReceptionDetail</title>
 <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
 <link rel="stylesheet" href="/css/docReceptionDetail.css">
+<link href="/css/aram.css" rel="stylesheet" />
 <script src="/js/jquery-3.7.0.min.js"></script> 
 <script src="/js/wnInterface.js"></script> 
 <script src="/js/mcore.min.js"></script> 
@@ -68,7 +69,13 @@ $(function() {
 		
 		let tdiagnosisdetail = $("#tdiagnosisdetail").val();
 		if(tdiagnosisdetail === "" ) {
-			alert("진단기록을 입력해주세요.");
+			//진단기록 입력 alert
+			$("#dh-modal-alert").addClass("active").fadeIn();
+    		setTimeout(function() {
+        		$("#dh-modal-alert").fadeOut(function(){
+            		$(this).removeClass("active");
+        		});
+    		}, 1000);
 			$("#tdiagnosisdetail").focus();
 			return false;
 		}
@@ -77,7 +84,6 @@ $(function() {
 	//모피어스 콜
 	document.getElementById("callIcon").addEventListener("click", function() {
 	  let phoneNumber = $("#phoneNumber").text();
-	  alert(phoneNumber);
 	  M.sys.call(phoneNumber);
 	});
 	
@@ -178,5 +184,22 @@ $(function() {
 	</footer>
 	</form>
 	</main>
+	
+				<!-- 알람모달 -->
+	
+	<div id="dh-modal-alert">
+		<div class="dh-modal">
+			<div class="dh-modal-content">
+				<div class="dh-modal-title">
+					<img class="dh-alert-img" src="https://cdn-icons-png.flaticon.com/512/6897/6897039.png">
+					알림
+				</div>
+				<div class="dh-modal-text">진단기록을 입력해주세요.</div>
+			</div>
+		</div>
+		<div class="dh-modal-blank"></div>
+	</div>
+	
+	
 </body>
 </html>

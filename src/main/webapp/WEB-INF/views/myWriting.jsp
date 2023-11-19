@@ -12,8 +12,15 @@
 <link href="/css/myWriting.css" rel="stylesheet" />
 <link rel="stylesheet"
 	href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
-<script src="../js/jquery-3.7.0.min.js"></script>
+<script src="/js/jquery-3.7.0.min.js"></script>
 <script type="text/javascript">
+
+$(function(){
+	/* 뒤로가기 버튼 */
+	$(document).on("click", ".xi-angle-left", function(){
+		location.href = "/menu";
+	});
+});
 
 function choiceDetail(bno, btype) {
     if (btype === 0) {
@@ -29,8 +36,8 @@ function choiceDetail(bno, btype) {
 </head>
 <body>
 	<header>
-		<a href="/menu"><i class="xi-angle-left xi-x"></i></a>
-		<div class="headerTitle">내 글 관리</div>
+		<i class="xi-angle-left xi-x"></i>
+		<div class="headerTitle">나의 게시글</div>
 		<div class="blank"></div>
 	</header>
 

@@ -138,7 +138,9 @@ public class QnaBoardController {
 		
 		model.addAttribute("searchWord", searchWord);
 
+
 		return "/qnaBoard";
+
 	}
 
 	@GetMapping("/writeQna")

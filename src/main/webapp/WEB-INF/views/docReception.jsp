@@ -16,6 +16,11 @@
 <script type="text/javascript">
 	$(function() {
 		
+		/* 뒤로가기 버튼 */
+		$(document).on("click", ".xi-angle-left", function(){
+			location.href = "/menu";
+		});
+		
 		//enter눌러도 메세지 보내기
 		$('#mname').keyup(function(a) {
 			if (a.keyCode === 13) {
@@ -49,6 +54,20 @@
 	});
 
 	function cancel() {
+		
+		let count = $("input[name=check]:checked");
+		
+		if(count.length == 0){
+			//진료취소할 행 선택
+			$("#dh-modal-alert7").addClass("active").fadeIn();
+    		setTimeout(function() {
+        		$("#dh-modal-alert7").fadeOut(function(){
+            		$(this).removeClass("active");
+        		});
+    		}, 1000);
+	    	return false;
+		}
+		
 		let row = [];
 
 		$("input[name=check]:checked").each(function() {
@@ -56,14 +75,29 @@
 			let tstatus = $(this).closest('.tr').find('.td#tstatus').text();
 			
 			if(tstatus == "진료완료") {
-				alert("처리완료된 진료입니다.");
+				//진료완료 alert
+				$("#dh-modal-alert2").addClass("active").fadeIn();
+        		setTimeout(function() {
+            		$("#dh-modal-alert2").fadeOut(function(){
+                		$(this).removeClass("active");
+            		});
+        		}, 1000);
+				$("input[name=allCheck]:checked").prop("checked", false);
 				$("input[name=check]:checked").prop("checked", false);
 				return false;
 			} else if(tstatus == "진료취소") {
-				alert("취소된 진료입니다.");
+				//진료취소 alert
+				$("#dh-modal-alert3").addClass("active").fadeIn();
+        		setTimeout(function() {
+            		$("#dh-modal-alert3").fadeOut(function(){
+                		$(this).removeClass("active");
+            		});
+        		}, 1000);
+				$("input[name=allCheck]:checked").prop("checked", false);
 				$("input[name=check]:checked").prop("checked", false);
 				return false;
 			} else {
+				
 				row.push(tno);
 			    if (row.length > 0) {
 			        $.ajax({
@@ -72,7 +106,7 @@
 			            data: { "row" : row },
 			            dataType: "json",
 			            success: function (data) {
-		 	            	//alert 띄우기
+		 	            	//진료취소 alert 띄우기
 			            	$(document).on("click", "#cancel", function(){
 			                    $("#dh-modal-alert").addClass("active").fadeIn();
 		 	                    setTimeout(function() {
@@ -85,14 +119,26 @@
 			                }); 
 			            },
 			            error: function (error) {
-			                alert("진료 취소 중 오류가 발생했습니다.");
+							//진료오류 발생
+							$("#dh-modal-alert6").addClass("active").fadeIn();
+			        		setTimeout(function() {
+			            		$("#dh-modal-alert6").fadeOut(function(){
+			                		$(this).removeClass("active");
+			            		});
+			        		}, 1000);
 			            }
 			        });//ajax끝
 			    
 			        
 			    }//행 1개 이상 선택
 			    else {
-			        alert("진료취소할 행을 선택해주세요.");
+					//진료처리 행 선택
+					$("#dh-modal-alert5").addClass("active").fadeIn();
+	        		setTimeout(function() {
+	            		$("#dh-modal-alert5").fadeOut(function(){
+	                		$(this).removeClass("active");
+	            		});
+	        		}, 1000);
 			    }//행 1개 이상 선택x else
 			}
 			
@@ -103,12 +149,24 @@
 		let count = $("input[name=check]:checked");
 		
 		if(count.length == 0){
-	    	alert("진료 처리할 행을 선택해주세요.");
+			//진료처리 행 선택
+			$("#dh-modal-alert5").addClass("active").fadeIn();
+    		setTimeout(function() {
+        		$("#dh-modal-alert5").fadeOut(function(){
+            		$(this).removeClass("active");
+        		});
+    		}, 1000);
 	    	return false;
 		}
 		
 		if(count.length > 1){
-	    	alert("진료 처리는 하나만 가능합니다.");
+			//진료처리 하나만 가능 alert
+			$("#dh-modal-alert4").addClass("active").fadeIn();
+    		setTimeout(function() {
+        		$("#dh-modal-alert4").fadeOut(function(){
+            		$(this).removeClass("active");
+        		});
+    		}, 1000);
 	    	$("input[name=check]:checked").prop("checked", false);
 	    	$("input[name=allCheck]:checked").prop("checked", false);
 	    	return false;
@@ -119,11 +177,23 @@
 			let tstatus = $(this).closest('.tr').find('.td#tstatus').text();
 			
 			if(tstatus == "진료완료") {
-				alert("처리완료된 진료입니다.");
+				//진료완료 alert
+				$("#dh-modal-alert2").addClass("active").fadeIn();
+        		setTimeout(function() {
+            		$("#dh-modal-alert2").fadeOut(function(){
+                		$(this).removeClass("active");
+            		});
+        		}, 1000);
 				$("input[name=check]:checked").prop("checked", false);
 				return false;
 			} else if(tstatus == "진료취소") {
-				alert("취소된 진료입니다.");
+				//진료취소 alert
+				$("#dh-modal-alert3").addClass("active").fadeIn();
+        		setTimeout(function() {
+            		$("#dh-modal-alert3").fadeOut(function(){
+                		$(this).removeClass("active");
+            		});
+        		}, 1000);
 				$("input[name=check]:checked").prop("checked", false);
 				return false;
 			} else {
@@ -139,7 +209,7 @@
 </head>
 <body>
 	<header>
-		<a href="/main"><i class="xi-angle-left xi-x"></i></a>
+		<i class="xi-angle-left xi-x"></i>
 		<div class="headerTitle">${docMainDetail.hname}</div>
 		<div class="blank"></div>
 	</header>
@@ -263,6 +333,96 @@
 					알림
 				</div>
 				<div class="dh-modal-text">진료가 취소되었습니다.</div>
+			</div>
+		</div>
+		<div class="dh-modal-blank"></div>
+	</div>
+	
+				<!-- 알람모달 -->
+	
+	<div id="dh-modal-alert2">
+		<div class="dh-modal">
+			<div class="dh-modal-content">
+				<div class="dh-modal-title">
+					<img class="dh-alert-img" src="https://cdn-icons-png.flaticon.com/512/6897/6897039.png">
+					알림
+				</div>
+				<div class="dh-modal-text">처리완료된 진료입니다.</div>
+			</div>
+		</div>
+		<div class="dh-modal-blank"></div>
+	</div>
+	
+				<!-- 알람모달 -->
+	
+	<div id="dh-modal-alert3">
+		<div class="dh-modal">
+			<div class="dh-modal-content">
+				<div class="dh-modal-title">
+					<img class="dh-alert-img" src="https://cdn-icons-png.flaticon.com/512/6897/6897039.png">
+					알림
+				</div>
+				<div class="dh-modal-text">취소된 진료입니다.</div>
+			</div>
+		</div>
+		<div class="dh-modal-blank"></div>
+	</div>
+	
+					<!-- 알람모달 -->
+	
+	<div id="dh-modal-alert4">
+		<div class="dh-modal">
+			<div class="dh-modal-content">
+				<div class="dh-modal-title">
+					<img class="dh-alert-img" src="https://cdn-icons-png.flaticon.com/512/6897/6897039.png">
+					알림
+				</div>
+				<div class="dh-modal-text">진료처리는 하나만 가능합니다.</div>
+			</div>
+		</div>
+		<div class="dh-modal-blank"></div>
+	</div>
+	
+						<!-- 알람모달 -->
+	
+	<div id="dh-modal-alert5">
+		<div class="dh-modal">
+			<div class="dh-modal-content">
+				<div class="dh-modal-title">
+					<img class="dh-alert-img" src="https://cdn-icons-png.flaticon.com/512/6897/6897039.png">
+					알림
+				</div>
+				<div class="dh-modal-text">진료처리할 행을 선택하세요.</div>
+			</div>
+		</div>
+		<div class="dh-modal-blank"></div>
+	</div>
+	
+							<!-- 알람모달 -->
+	
+	<div id="dh-modal-alert6">
+		<div class="dh-modal">
+			<div class="dh-modal-content">
+				<div class="dh-modal-title">
+					<img class="dh-alert-img" src="https://cdn-icons-png.flaticon.com/512/6897/6897039.png">
+					알림
+				</div>
+				<div class="dh-modal-text">진료처리 중 오류가 발생했습니다.</div>
+			</div>
+		</div>
+		<div class="dh-modal-blank"></div>
+	</div>
+	
+								<!-- 알람모달 -->
+	
+	<div id="dh-modal-alert7">
+		<div class="dh-modal">
+			<div class="dh-modal-content">
+				<div class="dh-modal-title">
+					<img class="dh-alert-img" src="https://cdn-icons-png.flaticon.com/512/6897/6897039.png">
+					알림
+				</div>
+				<div class="dh-modal-text">진료취소할 행을 선택하세요.</div>
 			</div>
 		</div>
 		<div class="dh-modal-blank"></div>

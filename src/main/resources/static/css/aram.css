@@ -8,7 +8,7 @@
 	url('https://cdn.rawgit.com/moonspam/NanumSquare/master/nanumsquare.css')
 	;
 
-#dh-modal-alert, #dh-modal-alert2, #dh-modal-alert3, #dh-modal-alert4, #dh-modal-alert5 {
+#dh-modal-alert, #dh-modal-alert2, #dh-modal-alert3, #dh-modal-alert4, #dh-modal-alert5, #dh-modal-alert6, #dh-modal-alert7 {
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -24,7 +24,7 @@
 	z-index: 1499;
 }
 
-#dh-modal-alert.active, #dh-modal-alert2.active, #dh-modal-alert3.active, #dh-modal-alert4.active, #dh-modal-alert5.active {
+#dh-modal-alert.active, #dh-modal-alert2.active, #dh-modal-alert3.active, #dh-modal-alert4.active, #dh-modal-alert5.active, #dh-modal-alert6.active, #dh-modal-alert7.active {
 	opacity: 1;
 	visibility: visible;
 }

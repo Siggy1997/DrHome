@@ -48,10 +48,16 @@ public class LoginController {
             session.setAttribute("mgrade", loginCheck.get("mgrade"));
             session.setAttribute("dno", loginCheck.get("dno"));
 
-            int mgrade = (int) loginCheck.get("mgrade");
             int getMno = loginService.getMno(map);
             
             int selectHealthRecord = loginService.selectHealthRecord(getMno);
+            
+            int mgrade = (int) loginCheck.get("mgrade");
+   
+            if(mgrade == 0 || mgrade == 1) {
+              json.put("PWresult", 4);
+              return json.toString();
+           }
             
             json.put("PWresult", 1);
             json.put("mno", getMno);
