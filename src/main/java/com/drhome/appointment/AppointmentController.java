@@ -22,7 +22,7 @@ public class AppointmentController {
 	@Autowired
 	private AppointmentService appointmentService;
 
-	@Autowired
+	@Autowired 
 	private AppointmentUtil util;
 
 	@Autowired
@@ -72,7 +72,7 @@ public class AppointmentController {
 		ArrayList<Map<String, Object>> doctor = appointmentService.findDoctorByHno(hno);
 
 		model.addAttribute("hospital", hospital);
-		model.addAttribute("doctor", doctor);
+		model.addAttribute("doctor", doctor); 
 		model.addAttribute("day", util.daysOfWeek());
 		model.addAttribute("date", util.dateOfWeek());
 

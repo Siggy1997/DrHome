@@ -10,9 +10,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link href="/css/medicalHistory.css" rel="stylesheet" />
 <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
-<script src="./js/jquery-3.7.0.min.js"></script> 
+<script src="/js/jquery-3.7.0.min.js"></script> 
 
 <script type="text/javascript">
+
+$(function(){
+	/* 뒤로가기 버튼 */
+	$(document).on("click", ".xi-angle-left", function(){
+		location.href = "/menu";
+	});
+});
+
 </script>
 
 <style type="text/css">
@@ -24,7 +32,7 @@ th, td {
 </head>
 <body>
 	<header>
-		<a href="/menu"><i class="xi-angle-left xi-x"></i></a>
+		<i class="xi-angle-left xi-x"></i>
 		<div class="headerTitle">진료내역</div>
 		<div class="blank"></div>
 	</header>

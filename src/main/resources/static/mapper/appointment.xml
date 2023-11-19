@@ -25,8 +25,13 @@
 		atime, hno, dno,
 		mno, dpno)
 		VALUES (#{content}, #{date}, #{day},
-		#{time}, #{hno}, #{dno}, #{mno}, (SELECT dpno FROM doctor WHERE
+		#{time}, #{hno}, #{dno},
+		#{mno}, (SELECT dpno FROM doctor WHERE
 		hno=#{hno} AND dno=#{dno}))
+		<selectKey keyProperty="ano" resultType="int" order="AFTER">
+			SELECT
+			LAST_INSERT_ID() AS ano
+		</selectKey>
 	</insert>
 
 	<insert id="appointmentTodayFinish">
@@ -58,16 +63,18 @@
 		SELECT adate, aday, TIME_FORMAT(atime, '%H:%i') as
 		atime,hname, dname, mname, dpkind
 		FROM appointment a
-		JOIN hospital h ON a.hno = h.hno
+		JOIN hospital h ON
+		a.hno = h.hno
 		JOIN member m ON a.mno = m.mno
-		JOIN doctor d ON a.dno = d.dno
+		JOIN doctor d ON a.dno =
+		d.dno
 		JOIN department dp ON a.dpno = dp.dpno
 		WHERE ano =#{ano}
 	</select>
-	
+
 	<insert id="pushtoAlert">
 		INSERT INTO notification (nappointmentNoti, mno)
 		VALUES(1, #{mno})
-	
+
 	</insert>
 </mapper>

@@ -22,16 +22,35 @@
 		$(document).on("click", ".xi-angle-left", function() {
 			history.back();
 		});
+		
+		/* 대표적 증상 선택했을 경우 추가하기 */
+		$(document).on("click", ".symptomKeyword", function() {
+			let symptomKeyword = $(this).text();
+			$("#content").val($("#content").val() + symptomKeyword);
+			$("#content").trigger("change");
+		});
 
 		/* 내용이 없을 때 막기 */
 		$(document).on("submit", "#telehealthApply", function(event) {
-			if ($("#content").val().length < 1) {
+			if ( !($(".next").hasClass("submit-btn-css")) ) {
 				event.preventDefault();
-				alert("내용을 입력해 주세요.")
+				 $("#dh-modal-alert").addClass("active").fadeIn();
+				    setTimeout(function() {
+				        $("#dh-modal-alert").fadeOut(function(){
+				            $(this).removeClass("active");
+				        });
+				    }, 1500);
 			}
 		});
 
 		/* 입력 다 했을 경우 버튼 효과 */
+		$(document).on("change", "#content", function() {
+			if ($(this).val().length < 1 || $(this).val().length > 200) {
+				$(".next").removeClass("submit-btn-css");
+			} else {
+				$(".next").addClass("submit-btn-css");
+			}
+		});
 		$(document).on("input", "#content", function() {
 			if ($(this).val().length < 1 || $(this).val().length > 200) {
 				$(".next").removeClass("submit-btn-css");
@@ -57,7 +76,7 @@
 		<main class="telehealthApplyContainerBox container">
 			<div class="infoSection">
 				<div class="information">
-					<div class="infoText">${telehealthApply.dpkind}증상을 알려주세요</div>
+					<div class="infoText">${telehealthApply.dpkind}&nbsp증상을 알려주세요</div>
 					<div class="infoImg">
 						<img src="./img/dp${telehealthApply.dpno}.png">
 					</div>
@@ -105,6 +124,7 @@
 			<input type="hidden" name="dpno" value="${telehealthApply.dpno}">
 			<input type="hidden" name="pay"
 				value="${telehealthApply.dspecialist}">
+			<div style="height: 9vh"></div>
 		</main>
 
 		<!-- footer -->
@@ -112,5 +132,19 @@
 			<button class="next">다음</button>
 		</footer>
 	</form>
+	
+	<!-- 알림창 -->
+	<div id="dh-modal-alert">
+		<div class="dh-modal">
+			<div class="dh-modal-content">
+				<div class="dh-modal-title">
+					<img class="dh-alert-img" src="https://cdn-icons-png.flaticon.com/512/6897/6897039.png">
+					알림
+				</div>
+				<div class="dh-modal-text">내용을 입력해 주세요.</div>
+			</div>
+		</div>
+		<div class="dh-modal-blank"></div>
+	</div>
 </body>
 </html>

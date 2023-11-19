@@ -22,6 +22,7 @@
 <script src="/js/wnInterface.js"></script>
 <script src="/js/mcore.min.js"></script>
 <script src="/js/mcore.extends.js"></script>
+
 <script type="text/javascript">
 
 $(function() {
@@ -35,7 +36,7 @@ $(function() {
 		let reviwer;
         let today = new Date();
         let options = { year: 'numeric', month: '2-digit', day: '2-digit' };
-        let todayDate = today.toISOString().substring(0,10); // '2022-06-09T09:15:50.162Z'
+        let todayDate = today.toISOString().split('T')[0]; // '2022-06-09T09:15:50.162Z'
 
 		let verygood = parseInt(${reviewCount.veryGood});
 		let good = parseInt(${reviewCount.good});
@@ -289,8 +290,10 @@ $(function() {
 	                item += "</div>";
 	                item += "<div class='reviewContent'>" + n.rcontent + "</div>";
 	                
+	                let reviewDate = new Date(n.rdate);
+	                
 	                //오늘 쓴 날짜면 시간만 / 아니면 날짜만
-					if(todayDate == n.rdate.substring(0,10)){
+					if(today.toDateString() == reviewDate.toDateString()){
 						item += "<div class='botwrap'><div class='reviewbottom'><div class='reviewDate'>" + n.rdate.substring(11,16) + "</div>";
 					}else{
 						 item += "<div class='botwrap'><div class='reviewbottom'><div class='reviewDate'>" + todayDate + "</div>";
@@ -318,6 +321,8 @@ $(function() {
 	        }
 	    });
 	}
+	
+	
 	
 		//리뷰 좋아요
 		$(document).on("click", ".reviewLike", function() {

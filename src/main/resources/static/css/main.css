@@ -179,9 +179,7 @@ main {
 	align-items: center;
 }
 
-.footer20 {
-	width: 20%
-}
+
 
 .mainTop Img {
 	width: 52px;
@@ -889,10 +887,7 @@ input:focus {
 	margin: 0;
 }
 
-.footerMap {
-	display: flex;
-	justify-content: center;
-}
+
 
 #slide {
 	background-color: red;
@@ -921,4 +916,11 @@ input:focus {
 .openMenu {
 	width: 100% !important;
 	height: 100vh !important;
+}
+.footer20 {
+	width: 20%
+}
+.footerMap {
+	display: flex;
+	justify-content: center;
 }

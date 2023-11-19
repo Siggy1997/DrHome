@@ -14,14 +14,29 @@
 <body>
 
 <header>
-    <i class="xi-angle-left xi-x"></i>
-    <div class="header title">글 수정하기</div>
+    <i class="xi-angle-left xi-x" onclick="history.back()"></i>
+    <div class="headerTitle">글 수정하기</div>
     <div class="blank"></div>
 </header>
 
 <main>
 
 <!-- <h2>[게시판 글 수정하기]</h2> -->
+
+
+	<!-- 댓글 알림 -->
+     <div id="dh-modal-alert">
+		<div class="dh-modal">
+			<div class="dh-modal-content">
+				<div class="dh-modal-title">
+					<img class="dh-alert-img" src="https://cdn-icons-png.flaticon.com/512/6897/6897039.png">
+					알림
+				</div>
+				<div class="dh-modal-text">내용을 입력해주세요.</div>
+			</div>
+		</div>
+		<div class="dh-modal-blank"></div>
+	</div>
 
 	<form action="/submitEditBoard" method="post" id="editForm">
 		<div>
@@ -32,17 +47,20 @@
 		</div>
 		<input type="hidden" name="bno" id="bno"
 			value="${bno}">
-			<div class="rightSide">
+			<!-- <div class="rightSide">
 		<button type="button" class="cancel" onclick="history.back()">취소</button>
-		<button type="submit" class="submit">완료</button>
-		</div>
-	</form>
+		</div> -->
+	
 	
 	</main>
 	
-	<footer></footer>
+	<footer>
+	<button type="submit" class="submit">완료</button>
+	</form>
+	</footer>
 
 <script>
+$("#dh-modal-alert").hide();
 		
 		document.getElementById('editForm').addEventListener(
 				'submit',
@@ -53,20 +71,36 @@
 			const content = document
 					.querySelector('textarea[name="bcontent"]').value;
 					
-					// 제목이나 내용 중 하나라도 비어있으면 경고창을 띄우고 전송을 막음
+	
 					if (title.trim() === '') {
-						alert('제목을 입력해주세요.');
-						event.preventDefault(); // 폼 전송 막기
-						return false;
+						 $("#dh-modal-alert").addClass("active").fadeIn();
+					 	    $("#dh-modal-alert .dh-modal-text").text("제목을 입력해주세요");
+					 	    setTimeout(function() {
+					 	        $("#dh-modal-alert").fadeOut(function(){
+					 	            $(this).removeClass("active");
+					 	        });
+					 	    }, 1000);
+					 	    
+					            event.preventDefault(); 
+					            return false;
 					}
 					if (content.trim() === '') {
-						alert('내용을 입력해주세요.');
-						event.preventDefault(); // 폼 전송 막기
-						return false;
-					}
 
-					// 폼 제출
+					    $("#dh-modal-alert").addClass("active").fadeIn();
+					    $("#dh-modal-alert .dh-modal-text").text("내용을 입력해주세요");
+					    setTimeout(function() {
+					        $("#dh-modal-alert").fadeOut(function(){
+					            $(this).removeClass("active");
+					        });
+					    }, 1000);
+					    event.preventDefault(); 
+			            return false;
+					    
+					} else {
+						// 폼 제출
 					this.submit();
+					}
+					
 				});
 	</script>
 

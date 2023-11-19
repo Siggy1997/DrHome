@@ -146,6 +146,19 @@ public class AdminService {
 		return adminDAO.detailOne(rhno);
 	}
 
+	public Map<String, Object> hospitalDetail(int rhno) {
+		return adminDAO.hospitalDetail(rhno);
+	}
+
+	public List<Map<String, Object>> doctorDetail(int rhno) {
+		// TODO Auto-generated method stub
+		return adminDAO.doctorDetail(rhno);
+	}
+
+	public Map<String, Object> detailTwo(int rdno) {
+		return adminDAO.detailTwo(rdno);
+	}
+
 	/*
 	 * public List<Map<String, Object>> hospitalList(int rhno) { return
 	 * adminDAO.hospitalList(rhno); }

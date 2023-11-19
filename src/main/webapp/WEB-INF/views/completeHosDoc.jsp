@@ -12,16 +12,15 @@
 <link href="/css/completeHosDoc.css" rel="stylesheet" />
 <script src="../js/jquery-3.7.0.min.js"></script> 
 <script type="text/javascript">
+
 </script>
 
 </head>
 <body>
-	<header></header>
 	
-	<main>
 	<div class="complete-area">
 	<div class="img-area">
-		<img class="img" alt="없음" src="/img/yes.png">
+		<img class="img" alt="없음" src="/img/checkBlue.png">
 	</div>
 	<div class="comment-area">
 		<p class="top-title">등록이 완료되었습니다.</p>
@@ -32,7 +31,6 @@
 	</div>
 	</div>
 	<div style="height: 9vh"></div>
-	</main>
 	
 	<footer>
 		<button style="margin-right: 15px;" type="button" onclick="location.href='/login'">확인</button>

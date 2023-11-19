@@ -31,6 +31,8 @@ public class MainController {
 		if (session.getAttribute("mno") != null && session.getAttribute("mno") != "") {
 			List<Map<String, Object>> notification = mainService.getNotification(session.getAttribute("mno"));
 			Map<String, Object> countNotification = mainService.countNotification(session.getAttribute("mno"));
+			Map<String, Object> userInfo = mainService.userInfo(session.getAttribute("mno"));
+			model.addAttribute("userInfo", userInfo);
 			model.addAttribute("notification", notification);
 			model.addAttribute("countNotification", countNotification);
 		}
@@ -61,13 +63,6 @@ public class MainController {
 		return "";
 	}
 	
-	@GetMapping("/menu")
-	public String menu(HttpSession session, Model model) {
-		if ( session.getAttribute("mno") != null && session.getAttribute("mno") != "") {
-			Map<String, Object> userInfo = mainService.userInfo(session.getAttribute("mno"));
-			model.addAttribute("userInfo", userInfo);
-		}
-		return "/menu";
-	}
+
 
 }

@@ -9,7 +9,6 @@
 <meta charset="UTF-8">
 <meta name="viewport"
 	content="initial-scale=1, width=device-width, user-scalable=no" />
-<link rel="stylesheet" href="./css/qnaBoard.css">
 <link rel="stylesheet"
 	href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
 <title>Insert title here</title>
@@ -17,14 +16,14 @@
 <body>
 
 <%@ include file="loginAlert.jsp"%>
-<main>
+
 	
 	
 <div class="freeContainer">
 
 <!-- <h1>자유 게시판</h1> -->
 <div class="backGroundBar">
-	<div class="space">
+	<div class="space" style= "text-align: right;">
 <button class="writeButton" onclick="confirmWriteFree()">작성하기</button>
 </div>
 </div>
@@ -40,9 +39,9 @@
 				<div class="bottomContainer">
 				<div class="nickname">${free.mnickname}</div>
 				<div class= "rightSide">
-				<div class="xi-comment-o xi-x"></div>
-				<div class="countComment">${free.comment_count}</div>
-				<div class="xi-heart-o xi-x"></div>
+				<div class="commentLogo"  ><img style="width: 20px;" src='https://cdn-icons-png.flaticon.com/512/1041/1041916.png'/></div>
+				<div class="countComment" style="margin-right: 13px;">${free.comment_count}</div>
+				<div class="heartLogo"><img style="width: 20px;" src='https://cdn-icons-png.flaticon.com/128/210/210545.png'/></div>
 				<div class="countCalldibs">${free.bcalldibsCount}</div>
 				</div>
 
@@ -72,48 +71,44 @@
      </div>
 	
 	
-	
-	
-	
-	<div style="height: 9vh"></div>
 
-	</main>
-
-	<footer></footer>
+	
 
 
 
 </body>
 <script>
+//로그인 모달
+$(".dh-modal-wrapper").hide();
+$(document).on("click", ".dh-close-modal", function(){
+	$(".dh-modal-wrapper").hide();
+});
+	
+function confirmWriteFree() {
+	
+	const mno = "${mno}";
+
+	if (mno === null || mno === undefined || mno === "") {
+		$(".dh-modal-wrapper").show();
+		
+	} else {
+		window.location.href = 'writeFree';
+	}
+}
+
 	
     var maxLength = 30; // 최대 문자열 길이
-    var contentElements = document.querySelectorAll(".content");
+    var contentElements = document.querySelectorAll(".fcontent");
 
-
+    contentElements.forEach(function(contentElement) {
 		if (text.length > maxLength) {
 			var truncatedText = text.slice(0, maxLength) + "...";
 			contentElement.textContent = truncatedText;
 		}
 	});
 
-        if (text.length > maxLength) {
-            var truncatedText = text.slice(0, maxLength) + "...";
-            contentElement.textContent = truncatedText;
-        }
-    });
-    
-function confirmWriteFree() {
-		
-		const mno = "${mno}";
+   
 
-		if (mno === null || mno === undefined || mno === "") {
-			$(".dh-modal-wrapper").show();
-			
-		} else {
-			window.location.href = 'writeFree';
-		}
-	}
-	
 
 </script>
 

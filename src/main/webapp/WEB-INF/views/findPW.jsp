@@ -110,8 +110,13 @@
                         }
                         
                       } else {
-                    	    alert("일치하는 정보가 없습니다.");
-                    	    $("#findPWInfo").html("<div class='form-area'><div class='form'><span>회원가입이 필요하신가요? </span><a href='./join'>&nbsp;&nbsp;회원가입 하러 가기</a></div></div>");
+	                          $("#dh-modal-alert2").addClass("active").fadeIn();
+	                          setTimeout(function() {
+	                              $("#dh-modal-alert2").fadeOut(function(){
+	                                  $(this).removeClass("active");
+		                    	      $("#findPWInfo").html("<div class='form-area'><div class='form'><span>회원가입이 필요하신가요? </span><a href='./join'>&nbsp;&nbsp;회원가입 하러 가기</a></div></div>");
+	                              });
+	                          }, 1000);
                     	}
 
                 }, 
@@ -193,11 +198,25 @@
 					<img class="dh-alert-img" src="https://cdn-icons-png.flaticon.com/512/6897/6897039.png">
 					알림
 				</div>
-				<div class="dh-modal-text">아이디가 클립보드에 복사되었습니다.</div>
+				<div class="dh-modal-text">비밀번호가 클립보드에 복사되었습니다.</div>
 			</div>
 		</div>
 		<div class="dh-modal-blank"></div>
 	</div>
 	
+				<!-- 알람모달2 -->
+	
+	<div id="dh-modal-alert2">
+		<div class="dh-modal">
+			<div class="dh-modal-content">
+				<div class="dh-modal-title">
+					<img class="dh-alert-img" src="https://cdn-icons-png.flaticon.com/512/6897/6897039.png">
+					알림
+				</div>
+				<div class="dh-modal-text">일치하는 정보가 없습니다.</div>
+			</div>
+		</div>
+		<div class="dh-modal-blank"></div>
+	</div>
 </body>
 </html>

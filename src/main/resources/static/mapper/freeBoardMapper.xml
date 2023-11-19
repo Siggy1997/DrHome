@@ -7,7 +7,7 @@
 		board.bno,
 		board.btitle,
 		board.bcontent,
-		IFNULL((CHAR_LENGTH(board.bcalldibs) - CHAR_LENGTH(REPLACE(board.bcalldibs, ',', ''))), 0) + 1 AS
+		IFNULL((CHAR_LENGTH(board.bcalldibs) - CHAR_LENGTH(REPLACE(board.bcalldibs, ',', ''))), 0) AS
 		bcalldibsCount,
 		COUNT(comment.cno) AS comment_count,
 		member.mnickname
@@ -25,6 +25,8 @@
 		SELECT
 		board.mno, board.bno, board.btitle, board.bcontent,
 		board.bdate, board.bcalldibs,
+		IFNULL((CHAR_LENGTH(board.bcalldibs) - CHAR_LENGTH(REPLACE(board.bcalldibs, ',', ''))), 0) AS
+		bcalldibsCount,
 		member.mnickname
 		FROM
 		board
@@ -150,9 +152,17 @@
 		SET
 		btitle =
 		#{btitle},
-		bcontent = #{bcontent},
+		bcontent = #{bcontent}
 		WHERE bno=#{bno}
 	</update>
+	
+		<update id="deleteBoard" parameterType="Map">
+		UPDATE board
+		SET
+		btype = #{btype}
+		WHERE bno=#{bno}
+	</update>
+	
 	
 	   <insert id="sendFreeNotification">
       INSERT INTO notification (mno, nfreeboardNoti )

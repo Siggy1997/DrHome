@@ -10,10 +10,10 @@
 <meta charset="UTF-8">
 
 <meta name="viewport" content="initial-scale=1, width=device-width, user-scalable=no"/> 
-
 <link rel="stylesheet" href="./css/writeQna.css">
 <link rel="stylesheet"
 	href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
+<script src="/js/jquery-3.7.0.min.js"></script>
 <title>Insert title here</title>
 </head>
 <body>
@@ -21,7 +21,7 @@
 
 <header>
     <i class="xi-angle-left xi-x" onclick="location.href = '/qnaBoard'"></i>
-    <div class="header title">작성하기</div>
+    <div class="headerTitle">작성하기</div>
     <div class="blank"></div>
 </header>
 
@@ -30,248 +30,153 @@
 
 
 	<!-- <h2>[QnA 게시판 글쓰기]</h2> --> 
-	<form action='<c:url value='/postQna'/>' method="post" id="qnaForm" enctype="multipart/form-data">
-		<div>
+	<form action='<c:url value='/postQna'/>' method="post" id="qnaForm">
+		
+		<!-- 필터 리스트 -->
+            <div class="selectDepartment">
+            	<div class="sortTitle margin-right">진료과목</div>
+            	<i class="xi-angle-down-thin"></i>
+            </div>
+		
+		<div id="openSortList">
+	         	<div class="selectSortList" style="display: none;">  
+		            <div class="소아과" data-department="소아과">소아과</div>
+		            <div class="치과" data-department="치과">치과</div>
+		            <div class="내과" data-department="내과">내과</div>
+		            <div class="이비인후과" data-department="이비인후과">이비인후과</div>
+		            <div class="피부과" data-department="피부과">피부과</div>
+		            <div class="산부인과" data-department="산부인과">산부인과</div>
+		            <div class="안과" data-department="안과">안과</div>
+		            <div class="정형외과" data-department="정형외과">정형외과</div>
+		            <div class="한의학과" data-department="한의학과">한의학과</div>
+		            <div class="비뇨기과" data-department="비뇨기과">비뇨기과</div>
+		            <div class="신경과" data-department="신경과">신경과</div>
+		            <div class="외과" data-department="외과">외과</div>
+		            <div class="정신의학과" data-department="정신의학과">정신의학과</div>
+		            <div class="unknown" data-department="unknown">잘 모름</div>
+	            </div>
+	         </div> 
+		 <input type="hidden" name="selectDepartment" id="selectedDepartment">
+		
+	         <div>
 			<input type="text" name="btitle"  class="btitle">
 		</div>
 		<div>
-			
 			<textarea rows="5" cols="13" name="bcontent" class="bcontent"></textarea>
 		</div>
-		<div class="selectDepartment">
-		<select name = "selectDepartment">
-		<option value = "department">진료과목</option>
-          <option value = "소아과">소아과</option>
-          <option value = "치과">치과</option>
-          <option value = "내과">내과</option>
-          <option value = "이비인후과">이비인후과</option>
-          <option value = "피부과">피부과</option>
-          <option value = "산부인과">산부인과</option>
-          <option value = "안과">안과</option>
-          <option value = "정형외과">정형외과</option>
-          <option value = "한의학과">한의학과</option>
-          <option value = "비뇨기과">비뇨기과</option>
-          <option value = "신경과">신경과</option>
-          <option value = "외과">외과</option>
-          <option value = "정신의학과">정신의학과</option>
-          <option value = "unknown">잘 모름</option>
-       </select>	
-       </div>
+		
 		<input type="hidden" name="bdate" id="bdate">
-		<!-- <input type="hidden" name="imageBase64" id="imageBase64"> -->
-		<div class="rightSide">
-		<button type="button" class="cancel" onclick="location.href='qnaBoard'">목록</button>
-		<button type="submit" class="submit">완료</button>
+		<!--<div class="rightSide">
+		</div> -->
+		
+		<!-- 댓글 알림 -->
+     <div id="dh-modal-alert">
+		<div class="dh-modal">
+			<div class="dh-modal-content">
+				<div class="dh-modal-title">
+					<img class="dh-alert-img" src="https://cdn-icons-png.flaticon.com/512/6897/6897039.png">
+					알림
+				</div>
+				<div class="dh-modal-text">내용을 입력해주세요.</div>
+			</div>
 		</div>
-	</form>
+		<div class="dh-modal-blank"></div>
+	</div>
+		
+	
 
-
-		<!-- <div>
-      <button id="picker">M.media.picker</button>
-  </div>
-  <div id="box"></div>
-  <div>
-    <button id="upload">Upload Current Image</button>
-  </div>
-  <div id="progress"></div>
-  <div id="upload-box"></div> -->
-
-  
 <div style="height: 9vh"></div>
 </main>
 
 
-	<footer></footer>
+	<footer><button type="submit" class="submit">완료</button></footer>
+</form>
 
 
-	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-	<script src="/js/mcore.min.js"></script>
-	<script src="/js/jquery.plugin.js"></script>
 
 	<script>
-		// 폼이 제출될 때 현재 날짜와 시간을 입력란에 추가
-		document
-				.getElementById('qnaForm')
-				.addEventListener(
-						'submit',
-						function(event) {
-							event.preventDefault(); // 기본 제출 동작을 막음
+	
+	  // 게시물 분류
+    $(document).on("click", ".selectDepartment", function(){
+        $("#openSortList").toggleClass("maxList");
+        $(".selectSortList").slideToggle("fast");
+    });
+	  
+    $(document).on("click", ".selectSortList > div", function(){
+        const selectedDepartment = $(this).data("department");
+        const sortTitle = $(this).text();
+        
+        // 선택된 부서 표시
+        $(".sortTitle").text(sortTitle);
 
-							// 현재 날짜와 시간을 가져오기
-							const currentDatetime = new Date();
-							const utcDatetime = new Date(currentDatetime
-									.toISOString().slice(0, 19)
-									+ "Z"); // UTC 시간으로 변환
-							const formattedDatetime = new Date(utcDatetime
-									.getTime()
-									+ 9 * 60 * 60 * 1000);
+        // 리스트 닫기
+        $("#openSortList").removeClass("maxList");
+        $(".selectSortList").slideUp("fast");
+    });
 
-							document.getElementById('bdate').value = formattedDatetime
-									.toISOString().slice(0, 19).replace("T",
-											" ");
+    // 폼이 제출될 때 현재 날짜와 시간을 입력란에 추가
+    document.getElementById('qnaForm').addEventListener('submit', function(event) {
+        event.preventDefault(); 
 
-							const title = document
-									.querySelector('input[name="btitle"]').value;
-							const content = document
-									.querySelector('textarea[name="bcontent"]').value;
-							const selectDepartment = document
-									.querySelector('select[name="selectDepartment"]').value;
+        const currentDatetime = new Date();
+        const utcDatetime = new Date(currentDatetime.toISOString().slice(0, 19) + "Z");
+        const formattedDatetime = new Date(utcDatetime.getTime() + 9 * 60 * 60 * 1000);
 
-							// 제목이나 내용 중 하나라도 비어있으면 경고창을 띄우고 전송을 막음
-							if (title.trim() === '') {
-								alert('제목을 입력해주세요.');
-								event.preventDefault(); // 폼 전송 막기
-								return false;
-							} else if (content.trim() === '') {
-								alert('내용을 입력해주세요.');
-								event.preventDefault(); // 폼 전송 막기
-								return false;
-							} else if (selectDepartment === 'department') {
-								alert('진료 과목을 선택해주세요.');
-								event.preventDefault(); // 폼 전송 막기
-								return false;
-							} else {
+        document.getElementById('bdate').value = formattedDatetime.toISOString().slice(0, 19).replace("T", " ");
 
-								const selectedDepartment = selectDepartment === 'unknown' ? null
-										: selectDepartment;
-								this.submit();
-							}
-						});
+        const title = document.querySelector('input[name="btitle"]').value;
+        const content = document.querySelector('textarea[name="bcontent"]').value;
+        const selectedDepartment = document.getElementById('selectedDepartment').value;
 
-		/*
+        // 제목이나 내용 중 하나라도 비어있으면 경고창을 띄우고 전송을 막음
+        if (title.trim() === '') {
+        	
+        	 $("#dh-modal-alert").addClass("active").fadeIn();
+      	    $("#dh-modal-alert .dh-modal-text").text("제목을 입력해주세요");
+      	    setTimeout(function() {
+      	        $("#dh-modal-alert").fadeOut(function(){
+      	            $(this).removeClass("active");
+      	        });
+      	    }, 1000);
+            
+            event.preventDefault();
+            return false;
+        } else if (content.trim() === '') {
+        	//알림
+		    $("#dh-modal-alert").addClass("active").fadeIn();
+		    $("#dh-modal-alert .dh-modal-text").text("내용을 입력해주세요");
+		    setTimeout(function() {
+		        $("#dh-modal-alert").fadeOut(function(){
+		            $(this).removeClass("active");
+		        });
+		    }, 1000);
+            
+            event.preventDefault();
+            return false;
+            
+        } else if (!selectedDepartment) {
+        	 $("#dh-modal-alert").addClass("active").fadeIn();
+       	    $("#dh-modal-alert .dh-modal-text").text("진료과목을 선택해주세요.");
+       	    setTimeout(function() {
+       	        $("#dh-modal-alert").fadeOut(function(){
+       	            $(this).removeClass("active");
+       	        });
+       	    }, 1000);
+            
+            event.preventDefault(); // 폼 전송 막기
+            return false;
+        } else {
+            this.submit();
+        }
+    });
+
+    // 선택한 부서를 hidden input에 설정
+    $(document).on("click", ".selectSortList > div", function(){
+        const selectedDepartment = $(this).data("department");
+        $("#selectedDepartment").val(selectedDepartment);
+
+    });
 		
-		 (function () {
-
-			    $.imagePicker = function () {
-			      return new Promise((resolve) => {
-			        M.media.picker({
-			          mode: "SINGLE",
-			          media: "PHOTO",
-			          // path: "/media", // 값을 넘기지않아야 기본 앨범 경로를 바라본다.
-			          column: 3,
-			          callback: (status, result) => {
-			            resolve({ status, result })
-			          }
-			        });
-			      })
-			    }
-
-			    $.convertBase64ByPath = function (imagePath) {
-			      if (typeof imagePath !== 'string') throw new Error('imagePath must be string')
-			      return new Promise((resolve) => {
-			        M.file.read({
-			          path: imagePath,
-			          encoding: 'BASE64',
-			          indicator: true,
-			          callback: function (status, result) {
-			            resolve({ status, result })
-			          }
-			        });
-			      })
-			    }
-
-			    $.uploadImageByPath = function (targetImgPath, progress) {
-			      return new Promise((resolve) => {
-			        const _options = {
-			          url: '/postQna',
-			          header: {},
-			          params: {},
-			          body: [
-			            // multipart/form-data 바디 데이터
-			            { name: "file", content: targetImgPath, type: "FILE" },
-			          ],
-			          encoding: "UTF-8",
-			          finish: (status, header, body, setting) => {
-			            resolve({ status, header, body })
-			          },
-			          progress: function (total, current) {
-			            progress(total, current);
-			          }
-			        }
-			        M.net.http.upload(_options);
-			      })
-			    }
-
-			  })();
-
-
-			  $(function () {
-
-			    let selectImagePath = '';
-			    let $previewImg = null;
-			    let $uploadImg = null;
-			    const $box = $('#box');
-			    const $uploadBox = $('#upload-box');
-			    const $progress = $('#progress');
-			    const $picker = $('#picker');
-			    const $upload = $('#upload');
-
-
-
-			    $picker.on('click', () => {
-			      if ($previewImg !== null) {
-			        $previewImg.remove();
-			        $previewImg = null;
-			      }
-			      selectImagePath = '';
-			      $.imagePicker()
-			        .then(({ status, result }) => {
-			          if (status === 'SUCCESS') {
-			            selectImagePath = result.path;
-			            return $.convertBase64ByPath(selectImagePath)
-			          } else {
-			            return Promise.reject('이미지 가져오기 실패')
-			          }
-			        })
-			        .then(({ status, result }) => {
-			          if (status === 'SUCCESS') {
-			            $previewImg = $(document.createElement('img'))
-			            $previewImg.attr('height', '200px')
-			            $previewImg.attr('src', "data:image/png;base64," + result.data)
-			            $box.append($previewImg);
-			          } else {
-			            return Promise.reject('BASE64 변환 실패')
-			          }
-			        })
-			        .catch((err) => {
-			          if (typeof err === 'string') alert(err)
-			          console.error(err)
-			        })
-			    })
-
-			    $upload.on('click', () => {
-			      if (selectImagePath === '') return alert('이미지를 선택해주세요.')
-			      if ($uploadImg) {
-			        $uploadImg.remove();
-			        $uploadImg = null;
-			      }
-			      $progress.text('')
-			      $.uploadImageByPath(selectImagePath, (total, current) => {
-			        console.log(`total: ${total} , current: ${current}`)
-			        $progress.text(`${current}/${total}`)
-			      })
-			        .then(({
-			          status, header, body
-			        }) => {
-			          // status code
-			          if (status === '200') {
-			            $progress.text('업로드 완료')
-			            const bodyJson = JSON.parse(body)
-			            $uploadImg = $(document.createElement('img'))
-			            $uploadImg.attr('height', '200px')
-			            $uploadImg.attr('src', bodyJson.fullpath)
-			            $uploadBox.append($uploadImg)
-			          } else {
-			            return Promise.reject('업로드를 실패하였습니다.')
-			          }
-			        })
-			        .catch((err) => {
-			          if (typeof err === 'string') alert(err)
-			          console.error(err)
-			        })
-			    })
-			  });
-		 */
 	</script>
 
 </body>

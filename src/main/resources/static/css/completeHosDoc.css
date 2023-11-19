@@ -99,3 +99,21 @@ footer button {
 	font-size: 15px;
 	border-radius: 14px;
 }
+
+.img-area {
+	width: 146px;
+    height: 146px;
+    background-color: #beecff;
+    border-radius: 50%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0px 15px #9be2ff;
+}
+
+.img {
+	width: 120px;
+    background-color: white;
+    border-radius: 50%;
+}

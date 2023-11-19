@@ -11,6 +11,7 @@
 	content="initial-scale=1, width=device-width, user-scalable=no" />
 <title>Pay</title>
 <link href="/css/pay.css" rel="stylesheet" />
+<link href="/css/aram.css" rel="stylesheet" />
 <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
 <script src="../js/jquery-3.7.0.min.js"></script> 
 <script type="text/javascript">
@@ -33,8 +34,14 @@ $(function() {
         let nullCdcard = cdcard === "카드사선택";
         
         if (nullFirstNum || nullSecondNum || nullThirdNum || nullLastNum || nullSvs || nullCdcard) {
-            alert("카드사를 먼저 조회해주세요.");
-			$("#payBtn").attr('disabled', true);
+			//카드사 alert
+			$("#dh-modal-alert").addClass("active").fadeIn();
+    		setTimeout(function() {
+        		$("#dh-modal-alert").fadeOut(function(){
+            		$(this).removeClass("active");
+        		});
+    		}, 1000);
+        	$("#payBtn").attr('disabled', true);
         } 
     });
     
@@ -377,5 +384,22 @@ $(function() {
 	</footer>
 	</form>
 	</main>
+	
+					<!-- 알람모달 -->
+	
+	<div id="dh-modal-alert">
+		<div class="dh-modal">
+			<div class="dh-modal-content">
+				<div class="dh-modal-title">
+					<img class="dh-alert-img" src="https://cdn-icons-png.flaticon.com/512/6897/6897039.png">
+					알림
+				</div>
+				<div class="dh-modal-text">카드사를 먼저 조회해주세요.</div>
+			</div>
+		</div>
+		<div class="dh-modal-blank"></div>
+	</div>
+	
+	
 </body>
 </html>

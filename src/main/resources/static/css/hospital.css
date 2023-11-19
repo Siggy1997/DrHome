@@ -594,7 +594,7 @@ main {
 .doctorHeader {
 	width: 90%;
 	margin: 0 auto;
-	padding: 8px 0;
+	padding: 14px 0;
 	display: flex;
 	flex-wrap: nowrap;
 }
@@ -620,7 +620,7 @@ main {
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
-	width: 60%;
+	width: 69%;
 	padding: 10px;
 	justify-content: space-between;
 	height: 90px;
@@ -661,7 +661,7 @@ main {
 	justify-content: flex-start;
 	align-items: center;
 	font-size: 13px;
-	padding-bottom: 10px;
+	padding-bottom: 12px;
 	color: #5c5c5c;
 }
 

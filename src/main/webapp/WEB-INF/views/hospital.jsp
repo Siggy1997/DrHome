@@ -32,9 +32,7 @@
       let symptomKeyword = urlParams.get('symptomKeyword');
       let optionKeyword = urlParams.get('optionKeyword');
       let keyword = urlParams.get('keyword');
-      if (urlParams == '') {
-         $("#keyword").val("예약 가능한 병원");
-      } else if (kindKeyword != null) {
+     if (kindKeyword != null) {
          $("#keyword").val(kindKeyword);
          $(".selectByDepartmentText").text(kindKeyword);
          $(".selectByDepartment").addClass("filter-btn-css");
@@ -271,7 +269,7 @@
 				        $("#dh-modal-alert").fadeOut(function(){
 				            $(this).removeClass("active");
 				        });
-				    }, 1000);
+				    }, 1500);
     	  }
       });
       
@@ -280,25 +278,38 @@
          
          let hospitalName = '';
          let hospitalDelName = '';
-         let sessionId = "<%=session.getAttribute("mid")%>"
          
          /* 로그인 체크 */
-         if( sessionId == "null" || sessionId == '' ) {
-            if (confirm("로그인을 해야 이용할 수 있는 서비스입니다. 로그인 하시겠습니까?")) {
-               return location.href= '/login';
-            } else {
-               return false;
-            }
+         if( ${sessionScope.mno == null || sessionScope.mno == ''} ){
+        	 $('.dh-modal-wrapper').show();
          } else {
             /* 빈 하트 눌렀을 때 -> 채워진 하트 */
             if ( $(this).hasClass("xi-heart-o") ) {
-               hospitalName = $(this).siblings().find($(".hospitalName")).text();
-               $(this).addClass("xi-heart").removeClass("xi-heart-o")
+            	
+            	$(".dh-modal-text").text("즐겨찾는 병원이 등록되었습니다.")
+            	$("#dh-modal-alert").addClass("active").fadeIn();
+				    setTimeout(function() {
+				        $("#dh-modal-alert").fadeOut(function(){
+				            $(this).removeClass("active");
+				        });
+				    }, 1500);
+
+		    	hospitalName = $(this).siblings().find($(".hospitalName")).text();
+		    	$(this).addClass("xi-heart").removeClass("xi-heart-o")
                
             /* 채워진 하트 눌렀을 때 -> 빈 하트 */
             } else {
                hospitalDelName = $(this).siblings().find($(".hospitalName")).text();
                $(this).addClass("xi-heart-o").removeClass("xi-heart")
+               
+               $(".dh-modal-text").text("즐겨찾는 병원이 해제되었습니다")
+               $("#dh-modal-alert").addClass("active").fadeIn();
+					    setTimeout(function() {
+					        $("#dh-modal-alert").fadeOut(function(){
+					            $(this).removeClass("active");
+					        });
+					    }, 1500);
+				    
             }
             $.ajax({
                   url: "./hospital",
@@ -322,7 +333,14 @@
          if (treatmentText === '접수 가능') {
             return location.href= '/reception/' + hno;
          } else {
-            alert("접수가 마감되었습니다.")
+        	 $(".dh-modal-text").text("접수가 마감되었습니다.")
+        	 $("#dh-modal-alert").addClass("active").fadeIn();
+				    setTimeout(function() {
+				        $("#dh-modal-alert").fadeOut(function(){
+				            $(this).removeClass("active");
+				        });
+				    }, 1500);
+				    
             return false;
          }
       });
@@ -522,8 +540,8 @@
 
 </head>
 <body>
+	<%@ include file="loginAlert.jsp"%>
    <form id="searchForm" action="/search" method="post">
-
       <!-- header -->
       <header>
          <i class="xi-angle-left xi-x"></i>
@@ -595,6 +613,7 @@
 	                     class="xi-radiobox-blank"></span>
 	               </button>
 	            </div>
+	            <input type="hidden" name="optionKeywordBox" id="optionKeywordBox">
 	            <div class="optionSubmit">
 	               <button>필터적용</button>
 	            </div>
@@ -906,55 +925,7 @@
                </div>
             </div>
          </div>
-
-         <!-- 유형 모달 -->
-         <div class="modal fade optionModal" id="exampleModal" tabindex="-1"
-            aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-               <div class="modal-content">
-                  <!-- 모달 헤더 -->
-                  <div class="modal-header">
-                     <h5 class="modal-title" id="exampleModalLabel">
-                        <button type="button" class="modalOption">유형</button>
-                     </h5>
-                     <button type="button" class="btn-close" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-                  </div>
-                  <!-- 모달 바디 -->
-                  <div class="modal-body">
-                     <div class="optionGroup">
-                        <button type="button" class="optionKind">
-                           <span class="optionKindText">전문의</span> <span
-                              class="xi-radiobox-blank"></span>
-                        </button>
-                        <button type="button" class="optionKind">
-                           <span class="optionKindText">여의사</span> <span
-                              class="xi-radiobox-blank"></span>
-                        </button>
-                        <button type="button" class="optionKind">
-                           <span class="optionKindText">주차장</span> <span
-                              class="xi-radiobox-blank"></span>
-                        </button>
-                        <button type="button" class="optionKind" value="휴일진료">
-                           <span class="optionKindText">휴일진료</span> <span
-                              class="xi-radiobox-blank"></span>
-                        </button>
-                        <button type="button" class="optionKind" value="야간진료">
-                           <span class="optionKindText">야간진료</span> <span
-                              class="xi-radiobox-blank"></span>
-                        </button>
-                     </div>
-
-                     <input type="hidden" name="optionKeywordBox"
-                        id="optionKeywordBox">
-                     <div class="optionSubmit">
-                        <button>선택완료</button>
-                     </div>
-
-                  </div>
-               </div>
-            </div>
-         </div>
+         
       </main>
    </form>
    
