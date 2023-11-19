@@ -81,7 +81,6 @@ main {
 	border-top: 1px solid #d5d2d2;
 	display: flex;
 	align-items: center;
-	
 	justify-content: space-between;
 	color: #5c5c5c;
 }
@@ -94,11 +93,11 @@ a {
 	 display: flex;
   justify-content: flex-end;
   align-items: center; 
-  color: black;
+  color: grey;
 }
 
 .rightSide > div {
-  margin-right: 3%; /* 각 요소 사이의 간격 조절 */
+  margin-right: 2%; /* 각 요소 사이의 간격 조절 */
 }
 
 
@@ -124,3 +123,5 @@ a {
   font-size: 20px; /* 아이콘 크기 조절 */
   margin-right: 5px; /* 아이콘과 텍스트 사이 간격 조절 */
 }
+
+

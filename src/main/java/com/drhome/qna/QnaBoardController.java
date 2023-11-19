@@ -65,23 +65,16 @@ public class QnaBoardController {
 		
 		Integer mno = (Integer) session.getAttribute("mno");
 		 Integer dno = (Integer) session.getAttribute("dno");
-		
-		// 로그인이 되어있지 않을 때 mno를 null로 처리
+
 		if (mno != null) {
 			model.addAttribute("mno", mno);
+		} else {
+			model.addAttribute("mno", null);
 		}
-		
 
 		if (dno != null) {
 			model.addAttribute("dno", dno);
 		}
-
-		//int mno = 1;
-
-		//int dno = 2; // 추후 세션값으로 변경 예정 // 답변 삭제, 수정
-		
-		
-		
 
 		Map<String, Object> qnaQuestion = qnaBoardService.qnaQuestion(bno);
 		model.addAttribute("qnaQuestion", qnaQuestion);
@@ -123,26 +116,31 @@ public class QnaBoardController {
 
 	@PostMapping("/searchWord")
 	public String searchWord(@RequestParam("searchWord") String searchWord,
-			@RequestParam("selectOption") String selectOption, Model model) {
+			@RequestParam("selectedOptionInput") String selectedOptionInput, Model model) {
 
-		if ("allOption".equals(selectOption)) {
+		if ("allOption".equals(selectedOptionInput) || "".equals(selectedOptionInput)) {
 			List<Map<String, Object>> boardSearchData = qnaBoardService.boardSearchAll(searchWord);
 			model.addAttribute("boardSearchData", boardSearchData);
+	
 		}
 
-		else if ("titleOption".equals(selectOption)) {
+		else if ("titleOption".equals(selectedOptionInput)) {
 			List<Map<String, Object>> boardSearchTitleData = qnaBoardService.boardSearchTitle(searchWord);
 			model.addAttribute("boardSearchData", boardSearchTitleData);
 		}
 
-		else if ("contentOption".equals(selectOption)) {
+		else if ("contentsOption".equals(selectedOptionInput)) {
 			List<Map<String, Object>> boardSearchContent = qnaBoardService.boardSearchContent(searchWord);
 			model.addAttribute("boardSearchData", boardSearchContent);
 		}
 
+	
+		
 		model.addAttribute("searchWord", searchWord);
 
-		return "redirect:qnaBoard";
+
+		return "/qnaBoard";
+
 	}
 
 	@GetMapping("/writeQna")
@@ -165,7 +163,6 @@ public class QnaBoardController {
 		qnaData.put("bdate", bdate);
 		qnaData.put("btype", 0);
 		qnaData.put("mno", mno);
-
 		qnaData.put("selectDepartment", selectDepartment);
 		// 파일 데이터를 바이트 배열로 변환
 		//byte[] fileBytes = file.getBytes();
@@ -317,7 +314,7 @@ public class QnaBoardController {
 	
 	@PostMapping("/submitEditQna")
 	public String submitEditQna(@RequestParam("bno") int bno, @RequestParam("btitle") String btitle, @RequestParam("bcontent") String bcontent,
-			 @RequestParam("selectDepartment") String selectDepartment, Model model) {
+			 @RequestParam("selectedDepartment") String selectedDepartment, Model model) {
 
 
 	    Map<String, Object> editQnaData = new HashMap<>();
@@ -325,7 +322,7 @@ public class QnaBoardController {
 	  //  editBoardData.put("btype", btype);
 	    editQnaData.put("btitle", btitle);
 	    editQnaData.put("bcontent", bcontent);
-	    editQnaData.put("selectDepartment", selectDepartment);
+	    editQnaData.put("selectDepartment", selectedDepartment);
 
 		qnaBoardService.editQna(editQnaData);
 		
