@@ -13,9 +13,15 @@
 	href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
 <link rel="stylesheet" href="/css/healthRecord.css">
 <link href="/css/aram.css" rel="stylesheet" />
-<script src="../js/jquery-3.7.0.min.js"></script>
+<script src="/js/jquery-3.7.0.min.js"></script>
 <script type="text/javascript">
 	$(function() {
+		
+		/* 뒤로가기 버튼 */
+		$(document).on("click", ".xi-angle-left", function(){
+			location.href = "/menu";
+		});
+		
 		$("#changeHealthRecordBtn").click(function() {
 			event.preventDefault(); //폼 전송 막기
 
@@ -70,14 +76,14 @@
 </head>
 <body>
 	<header>
-		<a href="/menu"><i class="xi-angle-left xi-x"></i></a>
-		<div class="headerTitle">건강기록</div>
+		<i class="xi-angle-left xi-x"></i>
+		<div class="headerTitle">건강 기록</div>
 		<div class="blank"></div>
 	</header>
 
 	<main>
 		<div class="main-area">
-			<p class="top-title">🏃‍♂️ 내 건강기록을 확인하기</p>
+			<p class="top-title">🏃‍♂️ 내 건강 기록을 확인하기</p>
 			<form id="changeHealthRecord"
 				action="../changeHealthRecord/${sessionScope.mno}" method="post">
 				<div class="input-area">

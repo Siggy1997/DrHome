@@ -310,7 +310,6 @@
 			</c:forEach>
 		</div>
 
-		<!-- 모달 -->
 		<div class="dh-modal-wrapper" style="display: none">
 			<div class="dh-modal-body">
 				<div class="swiper">
@@ -409,18 +408,6 @@
 				<button id="goLogin" onclick="location.href='/admin/hospitalOpen'">승 인</button>
 			</div>
 		</div>
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 		<div style="height: 9vh"></div>

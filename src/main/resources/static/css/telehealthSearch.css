@@ -417,3 +417,11 @@ footer {
 a {
 	text-decoration: none;
 	color: black;
+}
+.footer20 {
+	width: 20%
+}
+.footerMap {
+	display: flex;
+	justify-content: center;
+}

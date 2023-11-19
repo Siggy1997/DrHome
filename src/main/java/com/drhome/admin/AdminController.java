@@ -87,6 +87,7 @@ public class AdminController {
 	public String gradeChange(@RequestParam Map<String, String> map) {
 		
 
+
 		int result = adminService.gradeChange(map);
 		return "redirect:/admin/member";
 	}

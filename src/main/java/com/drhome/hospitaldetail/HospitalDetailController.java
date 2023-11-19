@@ -25,7 +25,7 @@ public class HospitalDetailController {
 	private HospitalDetailUtil util;
 
 	// 병원 상세페이지
-	@GetMapping("/hospitalDetail/{hno}")
+	@GetMapping("/hospitalDetail/{hno}") 
 	public String hospitalDetail(@PathVariable int hno, Model model) {
 
 		Map<String, Object> hospital = hospitalDetailService.findHospitalByHno(hno);
@@ -42,7 +42,7 @@ public class HospitalDetailController {
 		Map<String, Object> now = new HashMap<>();
 		now.put("dayOfWeek", util.getDayOfWeek(util.getDayOfWeek()));
 		now.put("time", util.getTime());
-
+		System.out.println(now);
 		model.addAttribute("hospital", hospital);
 		model.addAttribute("doctorList", doctorList);
 		model.addAttribute("now", now);

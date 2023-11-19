@@ -30,8 +30,8 @@
 <body>
 
 	<header>
-		<div class="xi-angle-left xi-x"></div>
 
+		<div class="xi-angle-left xi-x" onclick="location.href = '/main'"></div>
 		<div id="searchContainer">
 			<input type="text" id="searchInput" placeholder="병원 이름 검색">
 			<button id="searchButton">검색</button>
@@ -59,7 +59,6 @@
 <script>
 
 function refreshPage() {
-   
     location.reload();
     var currentLocationButton = document.getElementById('currentLocation');
     currentLocationButton.style.bottom = '30px'; 
@@ -73,17 +72,14 @@ function refreshPage() {
     newDiv.style.padding = "10px";
     newDiv.style.position = "absolute";
     newDiv.style.bottom = "-7px"; 
-    newDiv.style.left = "0px"; 
-    newDiv.style.zIndex = "1000"; // 맵보다 위에 위치하도록 설정
+    newDiv.style.left = "0px";
+    newDiv.style.zIndex = "1000";
     newDiv.style.backgroundColor = "#fff"; 
     newDiv.style.width = "100%"; 
     newDiv.style.height = "150px";
     newDiv.style.boxShadow = "0px 4px 4px rgba(0, 0, 0, 0.25)";
     newDiv.style.borderRadius = "20px";
- 
-    
-    
-    // body의 맨 뒤에 동적으로 생성한 div 추가
+     
     document.body.appendChild(newDiv);
 </script>
 
@@ -93,11 +89,8 @@ function refreshPage() {
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=80e6cca959046a32e36bfd9340bd8485"></script>
 
 
-
-
-
 <script>
-var map; // map 변수를 전역 범위에서 정의
+var map;
 
 document.addEventListener("DOMContentLoaded", function () {
     var dynamicContainer = document.getElementById("infoDiv");
@@ -105,17 +98,18 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 (function () {
-	
-    $(function () {
-    	
-      $.getCurrentLocation().then((result) => {
+
+	M.plugin("location").current({
+	    timeout: 10000,
+	    maximumAge: 1,
+	    callback: function( result ) {
         if (result.status === 'NS') {
           console.log('This Location Plugin is not supported');
          
         } else if (result.status !== 'SUCCESS') {
         
           if (result.message) {
-              
+        	// gps off
         	  console.log(result.status + ':' + result.message);
               initializeMap(37.498599, 127.028575); // 기본 중심 좌표
        
@@ -135,7 +129,7 @@ document.addEventListener("DOMContentLoaded", function () {
            
             var circle;
 
-         // 원을 그리는 함수
+         // 현위치 표시
             function drawCircle() {
                 var currentLevel = map.getLevel();
                 // 확대 레벨에 따라 반지름을 조절
@@ -149,16 +143,14 @@ document.addEventListener("DOMContentLoaded", function () {
                     center: new kakao.maps.LatLng(lat, lon),
                     radius: radius,
                     strokeWeight: 2,
-                    strokeColor: 'skyblue',
+                    strokeColor: '#00C9FF',
                     strokeOpacity: 0.7,
-                    fillColor: 'skyblue',
+                    fillColor: '#00C9FF',
                     fillOpacity: 0.3
                 });
 
                 circle.setMap(map);
-            }
-
-           
+            }         
             drawCircle();
 
             kakao.maps.event.addListener(map, 'zoom_changed', function() {
@@ -169,9 +161,8 @@ document.addEventListener("DOMContentLoaded", function () {
             console.log("It cann't get GPS Coords.");
           }
         }
-      });
-    });
-   
+	    }
+	});
    
    
  // 지도 초기화
@@ -182,9 +173,7 @@ document.addEventListener("DOMContentLoaded", function () {
             level: 5 
         };
 
-        // 지도
         map = new kakao.maps.Map(mapContainer, mapOption);
-
 
         // 장소의 상세정보
         var placeOverlay = new kakao.maps.CustomOverlay({ zIndex: 1 }),
@@ -215,9 +204,8 @@ document.addEventListener("DOMContentLoaded", function () {
             var hBreakEndTime = "${h.hbreakendtime}";
             var hHoliday = "${h.hholiday}";
             var hHolidayEndTime = "${h.hholidayendtime}";
-
-           
-           
+            
+            
             hospitals.push({
             	hospitalNumber: hospitalNumber,
                 title: title,
@@ -242,68 +230,49 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
 
-
             if (searchResults.style.display === 'block') {
                 searchResults.style.display = 'none';
             }
         });
         
-        
-        
+
 
         var searchButton = document.getElementById('searchButton');
 
      // 검색 버튼 클릭
         searchButton.addEventListener('click', function () {
-            // 검색어 가져오기
             var keyword = searchInput.value.trim();
-
-            // 결과 리스트 초기화
             searchResults.innerHTML = '';
-
-            // 검색어가 비어있으면 아무 작업도 수행하지 않음
-            if (!keyword) {
+          if (!keyword) {
                 return;
             }
 
-            // 병원 데이터를 순회하면서 검색어와 일치하는 항목 찾기
             hospitals.forEach(function (hospital) {
                 if (hospital.title.includes(keyword)) {
-                    // 검색어가 일치하는 경우 결과 리스트에 추가
                     var listItem = document.createElement('li');
                     listItem.textContent = hospital.title;
 
-                 // 클릭하면 해당 병원을 지도에 표시
+                 // 해당 병원을 지도에 표시
                     listItem.addEventListener('click', function () {
-                        // 주소로 좌표 검색
-                        geocoder.addressSearch(hospital.address, function (result, status) {
-                            
+                        geocoder.addressSearch(hospital.address, function (result, status) { 
                             if (status === kakao.maps.services.Status.OK) {
                                 var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-
-                                // 병원 좌표로 이동
                                 map.panTo(coords);
-
-                             // 해당 병원에 대한 마커를 찾아서 클릭한 것처럼 보이도록 설정
-                                simulateMarkerClick(hospital);
                             }
                         });
                     });
                  
-                 // 리스트 아이템에 간격 추가
                    listItem.style.marginTop = '5px';
                    listItem.style.marginBottom = '5px';
-                    listItem.style.fontSize = '16px';
+                    listItem.style.fontSize = '14px';
                     listItem.style.borderBottom = '1px solid lightgray'; 
                     listItem.style.padding = '2%';
 
-                 
-                    // 리스트 아이템을 결과 리스트에 추가
+
                     searchResults.appendChild(listItem);
                 }
             });
 
-            // 검색 결과가 있을 때만 결과 리스트를 보이도록 설정
             if (searchResults.children.length > 0) {
                 searchResults.style.display = 'block';
             } else {
@@ -337,15 +306,12 @@ document.addEventListener("DOMContentLoaded", function () {
             	if(hHoliday == 1){   		
             		if (currentTime >= openMinutes && currentTime <= holidayEndMinutes) {
                      return "진료중";        
-                 } else {
-              
+                 } else { 
                      return "진료종료";
                  }
-
             	} else {    		
             		 return "휴진일";
-            	}
-            	
+            	}          	
             } else {          	
             	if(currentTime >= hBreakTime && currentTime <= hBreakEndTime){
                     return "점심시간";        
@@ -385,8 +351,8 @@ document.addEventListener("DOMContentLoaded", function () {
             var hHoliday = position.hHoliday;
             var hHolidayEndTime = position.hHolidayEndTime;
 
-            const currentDay = new Date().getDay(); // 0: 일요일, 1: 월요일, ..., 6: 토요일
-
+            const currentDay = new Date().getDay(); // 0: 일요일, 1: 월요일, ..., 6: 토요일         
+            
             // 영업 상태를 확인
             var status = checkBusinessStatus(opentime, closetime, nightday, nightendtime, hHoliday, hHolidayEndTime);
 
@@ -398,12 +364,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 dotClass = "unavailableDot";
             }
             
-            
             // 컨테이너에 정보 추가
             var dynamicContainer = document.getElementById("infoDiv");
             dynamicContainer.innerHTML =
                 '<div class="wrap">' +
-                '    <div class="info"><a href="http://172.30.1.61/hospitalDetail/' + hospitalNumber + '" target="_blank" class="link">' +
+                '    <div class="info"><a href="/hospitalDetail/' + hospitalNumber + '" target="_blank" class="link">' +
                 '        <div class="title">' +
                 '            ' + title +
                 '        </div>' +
@@ -413,7 +378,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 '           </div>' +
                 '            <div class="desc">' +
                 '                <div class="ellipsis">' + address + '</div>' +
-                '                <div class="time">' + opentime + "~" + (nightday == currentDay ? nightendtime : closetime) + '</div>' +
+                '                <div class="time">' + opentime + "~" + (nightday == currentDay ? nightendtime : (hHoliday == 1 ? hHolidayEndTime : closetime)) + '</div>' +
                 '            </div>' +
                 '            <div class="' + dotClass + '">' + "●" + '</div>' +
                 '                <div class="status">' + status + '</div>' +
@@ -422,25 +387,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 '</div>';
 
 
-            // 컨테이너를 표시
             dynamicContainer.style.display = 'block';
              
             var currentLocationButton = document.getElementById('currentLocation');
             currentLocationButton.style.bottom = '160px';
         }
         
-     // 해당 병원에 대한 마커를 찾아서 클릭한 것처럼 보이도록 설정하는 부분
-        function simulateMarkerClick(hospital) {
-            hospitals.forEach(function (hospitalMarker) {
-                if (hospitalMarker.title === hospital.title) {
-                    // 마커 클릭 이벤트를 트리거
-                    kakao.maps.event.trigger(hospitalMarker.marker, 'click');
-
-                    handleMarkerClick(hospital);
-                }
-            });
-        }
-        
+    
 
         hospitals.forEach(function (position) {
             // 주소로 좌표 검색
@@ -449,33 +402,25 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (status === kakao.maps.services.Status.OK) {
                     var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
 
-                    
-
-                    var imageSrc = '/img/hospitalMarker.png', // 마커이미지의 주소입니다    
-                        imageSize = new kakao.maps.Size(32, 34.5), // 마커이미지의 크기입니다
-                        imageOption = {offset: new kakao.maps.Point(20, 50)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+                    var imageSrc = '/img/hospitalMarker.png',  
+                        imageSize = new kakao.maps.Size(32, 34.5),
+                        imageOption = {offset: new kakao.maps.Point(20, 50)};
            
-                    
-                 // 마커의 이미지정보를 가지고 있는 마커이미지를 생성합니다
+
                     var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption)
                  
-                    
-                    // 위치 마커로 표시
+ 
                     var marker = new kakao.maps.Marker({
                         map: map,
                         position: coords,
                         image: markerImage
                     });
 
-                    
-
-                    // 마커 클릭
                     kakao.maps.event.addListener(marker, 'click', function () {
                         handleMarkerClick(position);
                     });
 
 
-                    // 지도를 클릭했을 때 컨테이너 숨김
                     kakao.maps.event.addListener(map, 'click', function (mouseEvent) {
                         
                         if (!mouseEvent.target || !mouseEvent.target.toString().includes('Marker')) {
@@ -491,18 +436,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             });
         });
-    }
-   
-   
+    } 
    
   })();
 
-
-
-//뒤로가기 버튼
-$(document).on("click", ".xi-angle-left", function(){
-	history.back();
-});
 
 </script>
 

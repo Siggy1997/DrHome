@@ -20,6 +20,12 @@
 <script type="text/javascript">
 	$(document).ready(
 			function() {
+				
+				/* 뒤로가기 버튼 */
+				$(document).on("click", ".xi-angle-left", function(){
+					location.href = "/menu";
+				});
+				
 				$('.health-area i').on(
 						'click',
 						function() {
@@ -367,8 +373,8 @@ new daum.Postcode({
 </head>
 <body>
 	<header>
-		<a href="/menu"><i class="xi-angle-left xi-x"></i></a>
-		<div class="headerTitle">내 정보 관리</div>
+		<i class="xi-angle-left xi-x"></i>
+		<div class="headerTitle">내 정보</div>
 		<div class="blank"></div>
 	</header>
 

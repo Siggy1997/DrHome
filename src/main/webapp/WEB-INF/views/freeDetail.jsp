@@ -8,9 +8,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-
 <meta name="viewport" content="initial-scale=1, width=device-width, user-scalable=no"/> 
-
 <script src="./js/jquery-3.7.0.min.js"></script>
 <link rel="stylesheet" href="./css/freeDetail.css">
 <link rel="stylesheet"
@@ -21,7 +19,7 @@
 
 	<header>
 		 <i class="xi-angle-left xi-x" onclick="location.href = '/qnaBoard'"></i>
-		<div class="header title">자유게시판</div>
+		<div class="headerTitle">자유게시판</div>
 		<div class="blank"></div>
 	</header>
 
@@ -37,21 +35,23 @@
 			<div class="bnickname">${freePosting.mnickname}</div>
 			<div class="dot">•</div>
 			<div class="bdate">${freePosting.bdate}</div>
-	<c:if test="${freePosting.mno ne mno}">
-			<img id="reportButton" src='/img/siren.png'/>
-		</c:if>
+			
+			<c:if test="${freePosting.mno ne mno}">
+		<img id="reportButton" src='https://cdn-icons-png.flaticon.com/512/2760/2760618.png'/>
+	</c:if>
+	<div class="line"></div>
+	
 			<div class="bdetail">${freePosting.bcontent}</div>
-
-
 		</div>
 
+<!-- 공감버튼 -->
 <div class="sideContainer">
 		<c:if test="${isDibsTrue eq false}">
 			<form id="callDibsForm" action="/freePostLike" method="POST">
 				<input type="hidden" id="likePostInput" name="likePostInput"
 					value="false"> <input type="hidden" name="bno" id="bno"
 					value="${freePosting.bno}">
-				<button type="submit" id="dibsButtonFalse">♡ 공감하기</button>
+				<button type="submit" id="dibsButtonFalse">♡ ${freePosting.bcalldibsCount}</button>
 			</form>
 		</c:if>
 
@@ -60,11 +60,13 @@
 				<input type="hidden" id="likePostInput" name="likePostInput"
 					value="true"> <input type="hidden" name="bno" id="bno"
 					value="${freePosting.bno}">
-				<button type="submit" id="dibsButtonTrue">♥ 공감하기</button>
+				<button type="submit" id="dibsButtonTrue">♥ ${freePosting.bcalldibsCount}</button>
 			</form>
 		</c:if>
 
 
+  <div class="button-container right">
+<!-- 글 수정 버튼 -->
 		<c:if test="${freePosting.mno eq mno}">
 			<form id="requestEditForm" action="/editBoard" method="POST">
 				<input type="hidden" name="bno" id="bno" value="${freePosting.bno}">
@@ -74,58 +76,61 @@
 				<button class="xi-pen-o xi-x" id="editButton"></button>
 			</form>
 		</c:if>
-		</div>
+		
 
+<!-- 글 삭제 버튼 -->
+	<c:if test="${freePosting.mno eq mno}">
+		<form action="/deleteBoard" method="post" id="deleteFreeForm">
+			<input type="hidden" name="bno" id="bno" value="${freePosting.bno}">
+			<button class="xi-trash-o xi-x" id="deleteButton" class="bdelete"></button>
+		</form>
+	</c:if>
+</div>
+</div>
 
 	
 	<!-- 신고하기 모달 -->
-		<div id="reportModal" class="modal">
-			<div class="modal-content">
-				<span class="close" id="closeModal">&times;</span>
-				<h2>신고하기</h2>
-				<form action="/reportFreePost" method="post" id="reportForm">
-					<input type="hidden" name="rpdate" id="rpdate"> <input
-						type="hidden" name="bno" id="bno" value="${freePosting.bno}">
-					<textarea rows="5" cols="13" name="rpcontent" id="rpcontent"
-					placeholder="신고사유를 작성해주세요."></textarea>
-					<button type="submit" id="submitReport">신고하기</button>
-				</form>
-			</div>
-		</div>
+
 </div>
 
 
+	<div class="graySeperate"></div>
 
-
+		<!-- 댓글 -->
 		<div class="comment">
 		<div class="commentTitle"><div class="space">댓글</div></div>
 		<div class="space">
 			<c:forEach items="${freeComment}" var="comment">
 					<div class="cnickname">${comment.mnickname}</div>
-					<div class="cdetail">${comment.ccontent}</div>
 					<div class="cdate">${comment.cdate}</div>
+					<div class="cdetail">${comment.ccontent}</div>
 
 					<div class="rightSide">
 						<c:if test="${comment.mno ne mno}">
 							<button type="submit"
 								id="commentReportButton" data-bno="${freePosting.bno}"
-								data-cno="${comment.cno}"></button>
+								data-cno="${comment.cno}">
+								<img src='https://cdn-icons-png.flaticon.com/512/2760/2760618.png' style="width: 15px;"/>
+								</button>
 						</c:if>
+						
+						
 
+					<!-- 댓글 삭제하기 -->
 						<c:if test="${comment.mno eq mno}">
 							<form action="/deleteFreeComment" method="post"
 								id="deleteFreeComment">
 								<input type="hidden" name="cno" id="cno" value="${comment.cno}">
 								<input type="hidden" name="bno" id="bno"
 									value="${freePosting.bno}">
-								<button class="xi-trash-o xi-x" id="cdelete"
-									onclick="deleteConfirm()"></button>
+								<button class="xi-trash-o xi-x" id="cdelete"></button>
 							</form>
 						</c:if>
 					</div>
 					<div class="line"></div>
 
 
+		<!-- 댓글 신고하기 -->
 				<div id="commentReportModal" class="modal">
 					<div class="modal-content">
 						<span class="close" id="closeModal2">&times;</span>
@@ -134,11 +139,11 @@
 						<form action="/reportFreeComment" method="post"
 							id="commentReportForm">
 							<input type="hidden" name="crpdate" id="crpdate"> <input
-								type="hidden" name="cno" id="cno" value="${comment.cno}">
+								type="hidden" name="crpno" id="crpno" value="${comment.cno}">
 							<input type="hidden" name="bno" id="bno"
 								value="${freePosting.bno}">
 							<textarea rows="5" cols="13" name="rpcontent" id="rpcontent"></textarea>
-							<button type="submit">신고하기</button>
+							<button id="submitReport" type="submit">신고하기</button>
 						</form>
 					</div>
 				</div>
@@ -163,6 +168,21 @@
 		</div>
      </div>
      
+     <!-- 삭제 확인 모달 -->
+	<div class="del-modal-wrapper">
+		<div class="del-modal-delete">
+			<div class="del-modal-header">
+				<div class="del-modal-body">
+					<span class="h3">삭제하시겠습니까?</span>
+				</div>
+			</div>
+			<div class="del-modal-footer">
+				<button class="del-modal-button-no">아니오</button>
+				<button class="del-modal-button-yes">예</button>
+			</div>
+		</div>
+     </div>
+     
      	<!-- 댓글 알림 -->
      <div id="dh-modal-alert">
 		<div class="dh-modal">
@@ -183,23 +203,80 @@
 
 	<footer>
 
-		<div id="formContainer">
-			<form action="/writeFreeComment" method="post" id="freeCommentForm">
-				<div>
-					<textarea rows="5" cols="13" name="ccontent" id="ccontent"></textarea>
-				</div>
+		<form action="/writeFreeComment" method="post" id="freeCommentForm">
+			<div id="formContainer">
+				<textarea name="ccontent" id="ccontent"></textarea>
 				<input type="hidden" name="cdate" id="cdate"> <input
 					type="hidden" name="bno" id="bno" value="${freePosting.bno}">
-				<button type="submit" id="submitCommnetButton"
-					class="xi-message-o xi-2x"></button>
-			</form>
-		</div>
+				<button type="submit" id="submitCommentButton"
+					class="commentButton"><img src='https://cdn-icons-png.flaticon.com/512/10024/10024072.png' style=" width: 32px; transform: scaleX(-1);"/></button>
+			</div>
+		</form>
 
 
 	</footer>
 
 
 	<script>
+	
+	//로그인 모달
+	$(".dh-modal-wrapper").hide();
+	$(document).on("click", ".dh-close-modal", function(){
+		$(".dh-modal-wrapper").hide();
+	});
+	
+	//댓글 삭제 모달
+	$(".del-modal-wrapper").hide();
+
+	$(document).on("click", "#cdelete", function(event) {
+	    event.preventDefault();
+	    
+	    $(".del-modal-wrapper").show();
+	    $(".del-modal-wrapper .h3").text("삭제하시겠습니까?");
+	    $(".del-modal-button-yes").on("click", function() {
+	        
+	        $("#deleteFreeComment").submit();
+	    });
+
+	    $(document).on("click", ".del-modal-button-no", function() {
+	        $(".del-modal-wrapper").hide();
+	    });
+	});
+	
+	//게시글 삭제 모달
+	$(document).on("click", "#deleteButton", function(event) {
+	    event.preventDefault();
+	    
+	    $(".del-modal-wrapper").show();
+	    $(".del-modal-wrapper .h3").text("삭제하시겠습니까?");
+	    $(".del-modal-button-yes").on("click", function() {
+	        
+	        $("#deleteFreeForm").submit();
+	    });
+
+	    $(document).on("click", ".del-modal-button-no", function() {
+	        $(".del-modal-wrapper").hide();
+	    });
+	});
+	
+	//게시글 수정 모달
+	$(document).on("click", "#editButton", function(event) {
+	    event.preventDefault();
+	    
+	    $(".del-modal-wrapper").show();
+	    $(".del-modal-wrapper .h3").text("수정하시겠습니까?");
+	    $(".del-modal-button-yes").on("click", function() {
+	        
+	        $("#requestEditForm").submit();
+	    });
+
+	    $(document).on("click", ".del-modal-button-no", function() {
+	        $(".del-modal-wrapper").hide();
+	    });
+	});
+	
+	
+	
 		//날짜, 시간 변환하기
 		function updateDate(element, dateString) {
 			const postTime = new Date(dateString);
@@ -223,6 +300,8 @@
 			}
 		}
 
+		
+		//날짜, 시간 데이터 형식 적용
 		document.addEventListener("DOMContentLoaded", function() {
 			// bdate, cdate에 적용
 			const bdateElements = document.querySelectorAll(".bdate");
@@ -237,6 +316,7 @@
 		});
 
 		
+		//댓글 작성
 		document.getElementById('freeCommentForm').addEventListener(
 				'submit',
 				function(event) {
@@ -259,111 +339,100 @@
 						return false;
 					}
 
-					// 폼 제출
+					
 					this.submit();
 				});
 
-		function deleteConfirm() {
-			if (confirm("삭제하시겠습니까?")) {
-				return true;
-			} else {
-				event.preventDefault(); // 기본 제출 동작을 막음
-			}
-		}
-
-		$(".dh-modal-wrapper").hide();
-		$(document).on("click", ".dh-close-modal", function(){
-			$(".dh-modal-wrapper").hide();
-		});
-
 		
-		//찜버튼 유효성검사
-		document.getElementById("dibsButtonFalse").addEventListener("click",
-				function(event) {
-					const mno = "${mno}";
-
-					if (mno === null || mno === undefined || mno === "") {
-						event.preventDefault();
-
-						$(".dh-modal-wrapper").show();
-					}
-				});
-
-		// 버튼 클릭 시 모달 열기
-
-		document.getElementById("reportButton").addEventListener("click", function() {
-		   
-			const mno = "${mno}"; 
-		    
-		    
-		    if (mno === null || mno === undefined || mno === "") {
-		       
-		    	$(".dh-modal-wrapper").show();
-		    	
-		        } else {
-		        const reportCount = ${reportCount};
-		        
-		        if (reportCount !== 0) {
-		            alert("이미 신고한 게시물입니다.");
-		        } else {
-		            document.getElementById("reportModal").style.display = "block";
-		        }
-		    }
-		    
-		});
+		//본문 줄바꿈 적용
+		const bcontent = `${freePosting.bcontent}`; 
+		const formattedContent = bcontent.replace(/\r?\n/g, '<br>');
+		document.querySelector('.bdetail').innerHTML = formattedContent;
+	
+		 const cdetailElements = document.querySelectorAll('.cdetail');
+		   cdetailElements.forEach((element) => {
+		      const ccontent = element.innerHTML;
+		        const formattedContent = ccontent.replace(/\r?\n/g, '<br>');
+		      element.innerHTML = formattedContent;
+		    });
 
 
-						});
+			// 버튼 클릭 시 모달 열기
+			document.getElementById("reportButton").addEventListener("click", function() {
+			   
+				const mno = "${mno}"; 
+			    
+			    
+			    if (mno === null || mno === undefined || mno === "") {
+			       
+			    	$(".dh-modal-wrapper").show();
+			    	
+			        } else {
+			        const reportCount = ${reportCount};
+			        
+			        if (reportCount !== 0) {
+			        	 $("#dh-modal-alert").addClass("active").fadeIn();
+						    $("#dh-modal-alert .dh-modal-text").text("이미 신고한 게시글입니다.");
+						    setTimeout(function() {
+						        $("#dh-modal-alert").fadeOut(function(){
+						            $(this).removeClass("active");
+						        });
+						    }, 1000);
+			        } else {
+			            document.getElementById("reportModal").style.display = "block";
+			        }
+			    }
+			    
+			});
 
-		$(document)
-				.on(
-						"click",
-						"#commentReportButton",
-						function() {
+			
+			
 
-							const mno = "${mno}";
-							const bno = $(this).data("bno");
-							const cno = $(this).data("cno");
+			$(document)
+					.on(
+							"click",
+							"#commentReportButton",
+							function() {
+								
+								const mno = "${mno}"; 
+								const bno = $(this).data("bno");
+								const cno = $(this).data("cno");
 
 
-							 if (mno === null || mno === undefined || mno === "") {
-								 $(".dh-modal-wrapper").show();
-							 } else {
-							
-							
-							$.ajax({
-										url : "/commentReportCount",
-										type : "post",
-										data : {
-											bno : bno,
-											cno : cno
-										},
-										success : function(result) {
-											const data = JSON.parse(result);
+								 if (mno === null || mno === undefined || mno === "") {
+									 $(".dh-modal-wrapper").show();
+								 } else {
+								
+								
+								$.ajax({
+											url : "/commentReportCount",
+											type : "post",
+											data : {
+												bno : bno,
+												cno : cno
+											},
+											success : function(result) {
+												const data = JSON.parse(result);
 
-											if (data.result !== 0) {
-												alert("이미 신고한 댓글 입니다");
-											} else {
-												document
-														.getElementById("commentReportModal").style.display = "block";
+												if (data.result !== 0) {
+													
+													 $("#dh-modal-alert").addClass("active").fadeIn();
+													    $("#dh-modal-alert .dh-modal-text").text("이미 신고한 댓글입니다.");
+													    setTimeout(function() {
+													        $("#dh-modal-alert").fadeOut(function(){
+													            $(this).removeClass("active");
+													        });
+													    }, 1000);
+													    
+												} else {
+													document
+															.getElementById("commentReportModal").style.display = "block";
 
-												// 닫기 버튼 클릭 시 모달 닫기
-												closeModal2
-														.addEventListener(
-																"click",
-																function() {
-																	document
-																			.getElementById("commentReportModal").style.display = "none";
-																});
-
-												// 모달 외부 클릭 시 모달 닫기
-												window
-														.addEventListener(
-																"click",
-																function(event) {
-																	if (event.target == document
-																			.getElementById("commentReportModal")) {
-
+													// 닫기 버튼 클릭 시 모달 닫기
+													closeModal2
+															.addEventListener(
+																	"click",
+																	function() {
 																		document
 																				.getElementById("commentReportModal").style.display = "none";
 																	});
@@ -372,8 +441,7 @@
 													window
 															.addEventListener(
 																	"click",
-																	function(
-																			event) {
+																	function(event) {
 																		if (event.target == document
 																				.getElementById("commentReportModal")) {
 																			document
@@ -387,24 +455,37 @@
 												// 오류 처리
 											}
 										});
+								
+								 }
+							});
 
-							}
-						});
 
-		// 닫기 버튼 클릭 시 모달 닫기
-		closeModal.addEventListener("click", function() {
-			document.getElementById("reportModal").style.display = "none";
-		});
 
-		// 모달 외부 클릭 시 모달 닫기
-		window.addEventListener("click", function(event) {
-			if (event.target == document.getElementById("reportModal")) {
+			// 닫기 버튼 클릭 시 모달 닫기
+			closeModal.addEventListener("click", function() {
 				document.getElementById("reportModal").style.display = "none";
-			}
-		});
+			});
 
+			// 모달 외부 클릭 시 모달 닫기
+			window.addEventListener("click", function(event) {
+				if (event.target == document.getElementById("reportModal")) {
+					document.getElementById("reportModal").style.display = "none";
+				}
+			});
+		   
+		   
+		   
+		//찜버튼 유효성검사
+		document.getElementById("dibsButtonFalse").addEventListener("click",
+				function(event) {
+					const mno = "${mno}";
 
-	
+					if (mno === null || mno === undefined || mno === "") {
+						event.preventDefault();
+
+						$(".dh-modal-wrapper").show();
+					}
+				});
 		
 		
 	</script>

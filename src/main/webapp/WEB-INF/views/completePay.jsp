@@ -21,7 +21,7 @@
 	<main>
 	<div class="complete-area">
 	<div class="img-area">
-		<img class="img" alt="없음" src="/img/yes.png">
+		<img class="img" alt="없음" src="/img/checkBlue.png">
 	</div>
 	<div class="comment-area">
 		<p class="top-title">결제가 완료되었습니다.</p>
