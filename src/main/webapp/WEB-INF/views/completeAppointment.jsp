@@ -17,7 +17,6 @@
 
 </head>
 <body>
-
 	<div class="complete-area">
 		<div class="img-area">
 			<img class="img" alt="없음" src="/img/checkBlue.png">
@@ -31,7 +30,6 @@
 				<div class="subTitle">진료자</div>
 				<div>${appointment.mname }</div>
 			</div>
-			
 
 			<div class="wrapper" id="doctor">
 				<div class="subTitle">진료 의사</div>

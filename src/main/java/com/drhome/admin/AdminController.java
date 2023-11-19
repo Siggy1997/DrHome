@@ -81,16 +81,11 @@ public class AdminController {
 
 		return "admin/report";
 	}
-
+ 
 	// gradeChange
-	@RequestMapping(value = "/gradeChange", method = RequestMethod.GET)
+	@RequestMapping(value = "/admin/gradeChange", method = RequestMethod.GET)
 	public String gradeChange(@RequestParam Map<String, String> map) {
-		int grade = Integer.parseInt(map.get("grade"));
-		int mboardcount = Integer.parseInt(map.get("mboardcount"));
-
-		if (mboardcount >= 5) {
-			map.put("grade", "0");
-		}
+		
 
 		int result = adminService.gradeChange(map);
 		return "redirect:/admin/member";
@@ -125,7 +120,7 @@ public class AdminController {
 		return "/newHospital";
 	}
 
-	@PostMapping("/hospitalAdd")
+	@PostMapping("/newDoctor")
 	public String newHospital(@RequestParam Map<String, Object> map) {
 		System.out.println(map.get("rhno"));
 		
@@ -197,6 +192,7 @@ public class AdminController {
 	public String hospitalOpen(Map<String, Object> map, Model model) {
 
 		List<Map<String, Object>> hospitalOpen = adminService.hospitalOpen(map);
+		System.out.println(hospitalOpen);
 		map.put("hospitalOpen", hospitalOpen);
 		
 		  //@RequestParam("rhno") int rhno,
@@ -213,15 +209,21 @@ public class AdminController {
 	}
 	
 	@ResponseBody
-	@PostMapping("/admin/detail")
+	@GetMapping("/admin/detail")
 	public String detail(@RequestParam("rhno") int rhno) {
 		System.out.println(rhno);
+		Map<String, Object> hospitalDetail = adminService.hospitalDetail(rhno);
+		System.out.println(hospitalDetail);
 		
 		
-		List<Map<String, Object>> detail = adminService.detail(rhno);
-
+		List<Map<String, Object>> doctorDetail = adminService.doctorDetail(rhno);
+		System.out.println(doctorDetail);
+		 
+		
 		JSONObject json = new JSONObject();
-		json.put("detail", detail);
+		json.put("hospitalDetail", hospitalDetail);
+		json.put("doctorDetail", doctorDetail);
+		
 		System.out.println(json.toString());
 		
 		return json.toString();
@@ -263,13 +265,20 @@ public class AdminController {
 	}
 	
 	@PostMapping("/admin/newHosDoc")
-	public String realHospital(@RequestParam("rhno") int rhno) {
+	public String realHospital(@RequestParam("rhno") int rhno, @RequestParam("rdno") int rdno) {
+		System.out.println(rdno);
 		
 		Map<String, Object> hospitalApproval = adminService.detailOne(rhno);
 		int insertHospital = adminService.insertHospital(hospitalApproval);
 		System.out.println(insertHospital);
 		int deleteHospital = adminService.deleteHospital(rhno);
 		System.out.println(deleteHospital);
+		
+		Map<String, Object> doctorApproval = adminService.detailTwo(rdno);
+		int insertDoctor = adminService.insertDoctor(doctorApproval);
+		System.out.println(insertDoctor);
+		int deleteDoctor = adminService.deleteDoctor(rdno);
+		System.out.println(deleteDoctor);
 		
 		return "redirect:/admin/newHosDoc";
 	}

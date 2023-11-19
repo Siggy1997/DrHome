@@ -77,6 +77,12 @@ public interface AdminDAO {
 
 	Map<String, Object> detailOne(int rhno);
 
+	Map<String, Object> hospitalDetail(int rhno);
+
+	List<Map<String, Object>> doctorDetail(int rhno);
+
+	Map<String, Object> detailTwo(int rdno);
+
 	/* List<Map<String, Object>> hospitalList(int rhno); */
 
 }
