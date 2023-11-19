@@ -142,7 +142,7 @@ public class QnaBoardController {
 
 		model.addAttribute("searchWord", searchWord);
 
-		return "boardSearch";
+		return "redirect:qnaBoard";
 	}
 
 	@GetMapping("/writeQna")

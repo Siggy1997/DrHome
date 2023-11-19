@@ -34,8 +34,7 @@
 	
 	/* 로그인 확인 */
 	function link(url) {
-		let sessionId = "<%=session.getAttribute("mid")%>
-	"
+		let sessionId = "<%=session.getAttribute("mid")%>"
 		if (sessionId == "null" || sessionId == '') {
 			$(".dh-modal-wrapper").show();
 		} else {

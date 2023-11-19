@@ -10,6 +10,7 @@
 	content="initial-scale=1, width=device-width, user-scalable=no" />
 <title>Join</title>
 <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
+<link href="./css/aram.css" rel="stylesheet" />
 <link href="./css/join.css" rel="stylesheet" />
 <link href="/css/modal.css" rel="stylesheet" />
 <script src="./js/jquery-3.7.0.min.js"></script> 
@@ -23,7 +24,12 @@ $(function(){
         let isIdDuplicated = mid === "";
         
         if (isIdDuplicated) {
-            alert("아이디 중복확인 후 회원가입이 가능합니다.");
+            $("#dh-modal-alert").addClass("active").fadeIn();
+            setTimeout(function() {
+                $("#dh-modal-alert").fadeOut(function(){
+                    $(this).removeClass("active");
+                });
+            }, 1000);
             $("#joinMemberBtn").attr('disabled', true);
         } 
     });
@@ -180,8 +186,6 @@ $(function(){
 				    			let special = /[^a-zA-Z0-9가-힣]/; //특수문자 확인
 				    			let kor = /[가-힣]/; //한글 확인
 				    			let notNum = /[^0-9]/g; //숫자아닌지 확인
-				    			
-				    			//mid == "" || mpw == "" || mpwDuplication == "" || mname =="" || firstMrrn =="" || lastMrrn =="" || memail=="" || mhomeaddr=="" || mbirth=="" || firstNumber =="" || MiddleNumber=="" || lastNumber==""
 				    			
 				    		      if (mid == "") {
 				    		         $("#mid").focus();
@@ -426,7 +430,7 @@ function searchComAddr() {
 		<p id="pwInfo" class="info"></p>
     </div>
 	    <div class="input-area">
-	   	<p>비밀번호 중복확인</p>
+	   	<p>비밀번호 확인</p>
 		<input type="password" id="mpwDuplication" name="mpwDuplication" placeholder="비밀번호를 입력해주세요." maxlength="8">
 	    <p id="pwInfo2" class="info"></p>
     </div>
@@ -493,6 +497,21 @@ function searchComAddr() {
 	</form>
 	</div>
     </main> <!-- 컨테이너 끝 -->
+    
+    	<!-- 알람모달 -->
+	
+	<div id="dh-modal-alert">
+		<div class="dh-modal">
+			<div class="dh-modal-content">
+				<div class="dh-modal-title">
+					<img class="dh-alert-img" src="https://cdn-icons-png.flaticon.com/512/6897/6897039.png">
+					알림
+				</div>
+				<div class="dh-modal-text">아이디 중복확인 후 회원가입이 가능합니다.</div>
+			</div>
+		</div>
+		<div class="dh-modal-blank"></div>
+	</div>
 
     
 	<!-- 모달1 start -->
