@@ -36,7 +36,7 @@
 
 	<update id="gradeChange" parameterType="Map">
 		UPDATE member SET
-		mgrade=#{grade} WHERE mno=#{mno}
+		mgrade=#{mgrade} WHERE mno=#{mno}
 	</update>
 
 	<update id="resultChange" parameterType="Map">
@@ -211,4 +211,14 @@
 	<delete id="deleteHos" parameterType="Integer" >
 		DELETE FROM registerhospital WHERE rhno = #{rhno}
 	</delete>
+	
+	<select id="hospitalDetail">
+		SELECT * FROM registerhospital WHERE rhno=#{rhno};
+	</select>
+	
+	<select id="doctorDetail">
+		SELECT * FROM registerdoctor WHERE rhno=#{rhno};
+	</select>
+	
+	
 </mapper>

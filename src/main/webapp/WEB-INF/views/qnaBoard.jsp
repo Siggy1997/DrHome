@@ -258,6 +258,7 @@
 	</main>
 
 	<footer>
+
       <a class="footer20" href="./main">
          <div class="footerIcon now">
             <img alt="없음" src="/img/mainHomebefore.png">

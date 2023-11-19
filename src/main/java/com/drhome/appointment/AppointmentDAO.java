@@ -25,4 +25,5 @@ public interface AppointmentDAO {
 
 	void pushtoAlert(Map<String, Object> data);
 
+
 }

@@ -12,11 +12,47 @@
 <link rel="stylesheet"
 	href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
 <link rel="stylesheet"
-	href="https://unpkg.com/swiper/css/swiper.min.css">
+	href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 <script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-<script
-	src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
+	src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script src="../js/jquery-3.7.0.min.js"></script>
+
+<style type="text/css">
+.dh-modal-wrapper {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.5);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 1499;
+}
+
+.dh-modal-body {
+	width: 85%;
+	background-color: white;
+	display: flex;
+	flex-direction: column;
+	padding: 20px;
+	align-items: center;
+	border-radius: 8px;
+	margin: 25px;
+	z-index: 1500;
+	height: 60%;
+}
+
+.swiper {
+	width: 300px;
+	height: 90%;
+	z-index: 2000;
+}
+</style>
+
+
+
 <script type="text/javascript">
 	$(document)
 			.ready(
@@ -34,92 +70,104 @@
 											$
 													.ajax({
 														url : "./detail",
-														type : "POST",
+														type : "get",
 														data : {
 															"rhno" : rhno,
 														},
 														dataType : "json",
 														success : function(data) {
-															let detail = data.detail;
 
-															for (let i = 0; i < detail.length; i++) {
-																$("#data-rhno")
-																		.text(
-																				detail[i].rhno);
+															let hos = data.hospitalDetail;
+															let doc = data.doctorDetail;
+
+															$('#rhno').text(
+																	hos.rhno);
+															$('#rhname').text(
+																	hos.rhname);
+															$('#rhopendate')
+																	.text(
+																			hos.rhopendate);
+															$('#rhaddr').text(
+																	hos.rhaddr);
+															$('#rhtelnumber')
+																	.text(
+																			hos.rhtelnumber);
+															$('#rhinfo').text(
+																	hos.rhinfo);
+															$('#rhopentime')
+																	.text(
+																			hos.rhopentime);
+															$('#rhclosetime')
+																	.text(
+																			hos.rhclosetime);
+															$('#rhnightday')
+																	.text(
+																			hos.rhclosetime);
+															$('#rhnightendtime')
+																	.text(
+																			hos.rhnightendtime);
+															$('#rhbreaktime')
+																	.text(
+																			hos.rhbreaktime);
+															$('#rhbreakendtime')
+																	.text(
+																			hos.rhbreakendtime);
+															$('#rhholiday')
+																	.text(
+																			hos.rhholiday);
+															$(
+																	'#rhholidayendtime')
+																	.text(
+																			hos.rhholidayendtime);
+															$('#rhparking')
+																	.text(
+																			hos.rhparking);
+															$('#rhimg').text(
+																	hos.rhimg);
+
+															for (let i = 0; i < doc.length; i++) {
+																let oneDoc = doc[i];
+																let item = "<div class='swiper-slide'>";
+																item += "<div class= 'detailTitle'>DOCTOR</div>";
+																item += "<div>의사이름 : "
+																		+ oneDoc.rdname
+																		+ "</div>"
+																item += "<div>소개 : "
+																		+ oneDoc.rdinfo
+																		+ "</div>"
+																item += "<div>성별 : "
+																		+ oneDoc.rdgender
+																		+ "</div>"
+																item += "<div>학력 : "
+																		+ oneDoc.rdcareer
+																		+ "</div>"
+																item += "<div>전문의 : "
+																		+ oneDoc.rdspecialist
+																		+ "</div>"
+																item += "<div>비대면 진료 여부 : "
+																		+ oneDoc.rdtelehealth
+																		+ "</div>"
+																item += "<div>진료과 : "
+																		+ oneDoc.dpno
+																		+ "</div>"
+																item += "<div>등록 병원 : "
+																		+ oneDoc.rhno
+																		+ "</div>"
+																item += "<div>이미지 : "
+																		+ oneDoc.rdimg
+																		+ "</div>"
+																item += "</div>"
+
 																$(
-																		"#data-rhname")
-																		.text(
-																				detail[i].rhname);
-																$(
-																		"#data-rhopendate")
-																		.text(
-																				detail[i].rhopendate);
-																$(
-																		"#data-rhaddr")
-																		.text(
-																				detail[i].rhaddr);
-																$(
-																		"#data-rhtelnumber")
-																		.text(
-																				detail[i].rhtelnumber);
-																$("#data-rhimg")
-																		.text(
-																				detail[i].rhimg);
-																$(
-																		"#data-rhinfo")
-																		.text(
-																				detail[i].rhinfo);
-																$(
-																		"#data-rhopentime")
-																		.text(
-																				detail[i].rhopentime);
-																$(
-																		"#data-rhclosetime")
-																		.text(
-																				detail[i].rhclosetime);
-																$(
-																		"#data-rhnightday")
-																		.text(
-																				detail[i].rhnightday);
-																$(
-																		"#data-rhnightendtime")
-																		.text(
-																				detail[i].rhnightendtime);
-																$(
-																		"#data-rhbreaktime")
-																		.text(
-																				detail[i].rhbreaktime);
-																$(
-																		"#data-rhbreakendtime")
-																		.text(
-																				detail[i].rhbreakendtime);
-																$(
-																		"#data-rhholiday")
-																		.text(
-																				detail[i].rhholiday == 0 ? 'X'
-																						: 'O');
-																$(
-																		"#data-rhholidayendtime")
-																		.text(
-																				detail[i].rhholidayendtime);
-																$(
-																		"#data-rhparking")
-																		.text(
-																				detail[i].rhparking == 0 ? 'X'
-																						: 'O');
-																$("#approve")
-																		.val(
-																				detail[i].rhno);
+																		'.swiper-wrapper')
+																		.append(
+																				item);
 															}
 
-															$("#viewModal")
-																	.modal(
-																			"show");
+															$(
+																	'.dh-modal-wrapper')
+																	.show();
 
-															$("#data-rhname")
-																	.css(
-																			"font-weight",
-																			"bold");
 														},
 														error : function(error) {
 															alert("잘못된 에러입니다.");
@@ -155,18 +203,18 @@
 
 															for (let i = 0; i < searchHos.length; i++) {
 																tableMake += "<div class='chkData' id='searchTable'>";
-																tableMake += "<div style='display: none; text-align: left; margin-left: 10px;'>"
+																tableMake += "<div>"
 																		+ searchHos[i].rhno
 																		+ "</div>";
-																tableMake += "<div style='text-align: left; font-weight: bold; margin-left: 10px;'>"
+																tableMake += "<div>"
 																		+ searchHos[i].rhname
 																		+ "</div>";
-																tableMake += "<div style='text-align: left; margin-left: 10px; font-size: 12px;'>"
+																tableMake += "<div>"
 																		+ searchHos[i].rhaddr
 																		+ "</div>";
-																tableMake += "<div style='text-align: left; margin-left: 10px; font-size: 12px;'>"
+																tableMake += "<div>"
 																		+ searchHos[i].rhtelnumber;
-																tableMake += "<span style='text-align: right; margin-left: 180px;'>"
+																tableMake += "<span>"
 																		+ searchHos[i].rhopendate
 																		+ "</span></div>";
 																tableMake += "<div class='graySeperate'></div></div>";
@@ -209,141 +257,186 @@
 					});
 </script>
 </head>
-
-<header>
-	<i class="xi-angle-left xi-x" onclick="history.back()"></i>
-
-	<div class="blank"></div>
-
-	<div>
-		<h3 style="text-align: center; margin-right: 40px; font-size: 25px;">병원
-			등록 관리</h3>
-	</div>
-
-	<div class="blank"></div>
-</header>
-
 <body>
+	<header>
+
+		<a href="/login"><i class="xi-angle-left xi-x"></i></a>
+		<div class="headerTitle">병원 등록 관리</div>
+		<div id="blank"></div>
+
+	</header>
 	<main>
-		<div class="content">
+		<div class="grabSearch">
 			<div class="searchTab">
-				<select id="searchN" name="searchN" style="width: 60px;">
+				<select class="searchN" id="searchN" name="searchN">
 					<option value="" selected="selected">전체</option>
 					<option value="rhname">병원명</option>
 					<option value="rhaddr">주소</option>
-				</select> <input type="text" id="searchV" name="searchV" maxlength="10"
-					style="width: 70px;" />
+				</select> <input type="text" class="searchV" id="searchV" name="searchV"
+					maxlength="10" />
 				<button id="searchHos" type="button">검색</button>
-				<div id="searchDiv">
-					<c:forEach items="${hospitalOpen}" var="hospitalOpen">
-						<div class="chkData" id="searchTable">
-							<div style="text-align: left; margin-left: 10px; display: none;">${hospitalOpen.rhno }</div>
-							<div
-								style="text-align: left; margin-left: 10px; margin-top: 5px; font-weight: bold;">${hospitalOpen.rhname }</div>
-							<div
-								style="text-align: left; margin-left: 10px; font-size: 12px;">${hospitalOpen.rhaddr}</div>
-							<div
-								style="text-align: left; margin-left: 10px; font-size: 12px;">${hospitalOpen.rhtelnumber}
-								<span style="text-align: right; margin-left: 220px;">${hospitalOpen.rhopendate}</span>
-							</div>
-							<div class="graySeperate"></div>
-						</div>
-					</c:forEach>
-				</div>
 			</div>
 		</div>
 
-		<div class="modal" id="viewModal" tabindex="-1"
-			aria-labelledby="exampleModalLabel" aria-hidden="true"
-			data-bs-backdrop="static" data-keyboard="false">
-			<!-- 모달 내용 -->
-			<div class="swiper-container">
-				<div class="swiper-wrapper">
-					<div class="modal-dialog">
-						<div class="modal-content">
-							<div class="edit-header">
-								<h1
-									style="position: fixed; float: left; left: 54px; font-weight: bold; top: 150px;"
-									class="modal-title" id="data-rhname"></h1>
-								<span style="right: 62px; position: fixed; top: 154px;"
-									class="xi-close xi-x" data-bs-dismiss="modal"></span>
-							</div>
-							<div style="margin-top: 20px;" class="line"></div>
-							<div class="modal-body swiper-slide view-body">
-								<div class="modal-div"
-									style="text-align: left; margin-top: 10px; margin-left: 30px;">
-									<div style="text-decoration: underline; font-size: 20px;">
-										번호 <span
-											style="position: fixed; font-weight: bold; font-size: 18px; text-align: right; right: 85px;"
-											id="data-rhno"></span>
-									</div>
-									<br>
-									<div style="font-size: 18px;">
-										개원일 <span
-											style="position: fixed; font-weight: bold; font-size: 14px; text-align: right; right: 85px;"
-											id="data-rhopendate"></span>
-									</div>
-									<br>
-									<div style="font-size: 18px;">
-										전화번호 <span
-											style="position: fixed; font-weight: bold; font-size: 14px; text-align: right; right: 85px;"
-											id="data-rhtelnumber"></span>
-									</div>
-									<br>
-									<div style="font-size: 18px;">
-										주소 <span
-											style="position: fixed; font-weight: bold; font-size: 14px; text-align: right; right: 85px;"
-											id="data-rhaddr"></span>
-									</div>
-									<br>
-									<div style="font-size: 18px;">
-										주차 여부 <span
-											style="position: fixed; font-weight: bold; font-size: 14px; text-align: right; right: 85px;"
-											id="data-rhparking"></span>
-									</div>
 
-									<br>
-									<div style="font-size: 18px;">진료시간</div>
-									<span
-										style="font-weight: bold; font-size: 14px; text-align: right;"
-										id="data-rhopentime"></span> ~ <span
-										style="font-weight: bold; font-size: 14px; text-align: right;"
-										id="data-rhclosetime"></span> <br> <br>
-									<div style="font-size: 18px;">야간진료 요일 및 종료시간</div>
-									<span
-										style="font-weight: bold; font-size: 14px; text-align: right;"
-										id="data-rhnightday"></span> / <span
-										style="font-weight: bold; font-size: 14px; text-align: right;"
-										id="data-rhnightendtime"></span> <br> <br>
-									<div style="font-size: 18px;">브래이크 시간 및 종료</div>
-									<span
-										style="font-weight: bold; font-size: 14px; text-align: right;"
-										id="data-rhbreaktime"></span> ~ <span
-										style="font-weight: bold; font-size: 14px; text-align: right;"
-										id="data-rhbreakendtime"></span> <br> <br>
-									<div style="font-size: 18px;">공휴일 진료여부 및 종료</div>
-									<span
-										style="font-weight: bold; font-size: 14px; text-align: right;"
-										id="data-rhholiday"></span> / <span
-										style="font-weight: bold; font-size: 14px; text-align: right;"
-										id="data-rhholidayendtime"></span>
-								</div>
-							</div>
-							<div style="margin-top: 10px;" class="line"></div>
-							<div class="modal-footer view-footer">
-								<form action="/admin/newHosDoc" method="POST">
-									<input type="hidden" id="approve" name="rhno" value="" />
-									<button type="submit" class="dhBtn" id="confirm">승인</button>
-								</form>
-								<button type="button" class="dhBtn" id="cancel">삭제</button>
-							</div>
-						</div>
+		<div id="searchDiv">
+			<c:forEach items="${hospitalOpen}" var="hospitalOpen">
+				<div class="chkData" id="searchTable">
+					<div>${hospitalOpen.rhno }</div>
+					<div>${hospitalOpen.rhname }</div>
+					<div>${hospitalOpen.rhaddr}</div>
+					<div>${hospitalOpen.rhtelnumber}
+						<span>${hospitalOpen.rhopendate}</span>
 					</div>
+					<div class="graySeperate"></div>
 				</div>
+			</c:forEach>
+		</div>
+
+		<!-- 모달 -->
+		<div class="dh-modal-wrapper" style="display: none">
+			<div class="dh-modal-body">
+				<div class="swiper">
+
+					<div class="swiper-wrapper">
+
+						<div class="swiper-slide">
+							<div class="detailTitle">HOSPITAL</div>
+
+							<div>
+								<div>번호</div>
+								<div id="rhno">번호</div>
+							</div>
+
+							<div>
+								<div>등록병원명</div>
+								<div id="rhname">등록병원명</div>
+							</div>
+
+							<div>
+								<div>개원일</div>
+								<div id="rhopendate">개원일</div>
+							</div>
+
+							<div>
+								<div>주소</div>
+								<div id="rhaddr">주소</div>
+							</div>
+
+							<div>
+								<div>전화번호</div>
+								<div id="rhtelnumber">전화번호</div>
+							</div>
+
+							<div>
+								<div>등록병원 소개</div>
+								<div id="rhinfo">등록병원 소개</div>
+							</div>
+
+							<div>
+								<div>시작시간</div>
+								<div id="rhopentime">시작시간</div>
+							</div>
+
+							<div>
+								<div>종료시간</div>
+								<div id="rhclosetime">종료시간</div>
+							</div>
+
+							<div>
+								<div>야간 진료요일</div>
+								<div id="rhnightday">야간 진료요일</div>
+							</div>
+
+							<div>
+								<div>야간 종료시간</div>
+								<div id="rhnightendtime">야간 종료시간</div>
+							</div>
+
+							<div>
+								<div>브레이크타임</div>
+								<div id="rhbreaktime">브레이크타임</div>
+							</div>
+
+							<div>
+								<div>브레이크 종료시간</div>
+								<div id="rhbreakendtime">브레이크 종료시간</div>
+							</div>
+
+							<div>
+								<div>공휴일 진료여부</div>
+								<div id="rhholiday">공휴일 진료여부</div>
+							</div>
+
+							<div>
+								<div>공휴일 종료시간</div>
+								<div id="rhholidayendtime">공휴일 종료시간</div>
+							</div>
+
+							<div>
+								<div>주차여부</div>
+								<div id="rhparking">주차여부</div>
+							</div>
+							<div>
+								<div>이미지</div>
+								<div id="rhimg">이미지</div>
+							</div>
+
+						</div>
+
+
+					</div>
+
+					<div class="swiper-pagination"></div>
+
+
+
+				</div>
+
+
+
 			</div>
 		</div>
+
+
+		<div class="dh-modal-footer">
+			<button class="dh-modal-button dh-close-modal">취소</button>
+			<button class="dh-modal-button" onclick="location.href='/login'">로그인</button>
+		</div>
+
+
+
+
+
+
+		<form action="/admin/newHosDoc" method="POST">
+			<input type="hidden" id="approve" name="rhno" value="" />
+			<button type="submit" class="dhBtn" id="confirm">승인</button>
+		</form>
+		<button type="button" class="dhBtn" id="cancel">삭제</button>
+
+
+
+
 		<div style="height: 9vh"></div>
 	</main>
 	<footer> </footer>
+
+	<script type="text/javascript">
+		//스와이퍼 시작
+		const swiper = new Swiper('.swiper', {
+			// Optional parameters
+			direction : 'horizontal',
+			loop : true,
+
+			pagination : {
+				el : '.swiper-pagination',
+			},
+
+		});
+	</script>
+
+
+
 </body>
 </html>

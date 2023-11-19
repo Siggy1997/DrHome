@@ -188,28 +188,28 @@
 	
 	
 	<footer>
-		<a href="./main">
-			<div class="footerIcon">
+		<a class="footer20" href="./main">
+			<div class="footerIcon now">
 				<img alt="없음" src="/img/mainHomebefore.png">
 				<p>홈</p>
 			</div>
-		</a> <a href="./search">
-			<div class="footerIcon now">
+		</a> <a class="footer20" href="./search">
+			<div class="footerIcon">
 				<img alt="없음" src="/img/mainSearchAfter.png">
 				<p>검색</p>
 			</div>
-		</a> <a href="./hospitalMap">
+		</a> <a class="footer20 footerMap" href="./hospitalMap">
 			<div class="footerMain">
 				<div class="footerIcon" id="mapIcon">
 					<img alt="없음" src="/img/mainMap.png">
 				</div>
 			</div>
-		</a> <a href="./qnaBoard">
+		</a> <a class="footer20" href="./qnaBoard">
 			<div class="footerIcon">
 				<img alt="없음" src="/img/mainQnAbefore.png">
 				<p>고민 상담</p>
 			</div>
-		</a><a class="chatting">
+		</a><a class="footer20 chatting">
 			<div class="footerIcon">
 				<img alt="없음" src="/img/myChatting3.png">
 				<p>실시간 채팅</p>
