@@ -41,7 +41,7 @@
 	border-radius: 8px;
 	margin: 25px;
 	z-index: 1500;
-	height: 67%;
+	height: 60%;
 }
 
 .swiper {

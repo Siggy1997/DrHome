@@ -21,9 +21,12 @@ function gradeCh(mno, name, value, count) {
            });
           location.href="./gradeChange?mno="+mno+"&mname"+name+"&mgrade="+value+"&mboardcount="+count;
        }, 1000);
+}; 
 
+function goback() {
+	   window.history.back();
+	}
 
-};   
 
 </script>
 
@@ -45,7 +48,7 @@ function gradeCh(mno, name, value, count) {
    </div>
 
    <header>
-      <a href="/login"><i class="xi-angle-left xi-x"></i></a>
+     <a href="javascript:history.back();"><i class="xi-angle-left xi-x"></i></a>
       <div class="headerTitle">회원 관리</div>
       <div class="blank"></div>
    </header>
@@ -105,7 +108,7 @@ function gradeCh(mno, name, value, count) {
       </div>
    </main>
    <footer>
-      <button onclick="location.href='../login'">돌아가기</button>
+      <button onclick=goback()>돌아가기</button>
    </footer>
 </body>
 </html>

@@ -827,3 +827,13 @@ main {
 .dh-modal-blank {
 	height: 9vh;
 }
+
+/* 즐겨찾기 이동 */
+.dh-hospitalLike {
+	background-color: #a4a2a2;
+	color: white;
+	border-radius: 7px;
+	padding: 5px 7px;
+	border: none;
+	margin-left: 79px;
+}

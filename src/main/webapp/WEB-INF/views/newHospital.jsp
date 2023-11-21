@@ -185,10 +185,6 @@
 				<input class="vector" type="text" placeholder="전화번호" name="rhtelnumber" id="rhtelnumber">
 			</div>
 			<div class="Group">
-				<p>이미지</p>
-				<input class="vector" type="text" placeholder="이미지" name="rhimg" id="rhimg">
-			</div>
-			<div class="Group">
 				<p>소 개</p>
 				<input class="vector" type="text" placeholder="소 개" name="rhinfo" id="rhinfo">
 			</div>

@@ -6,9 +6,9 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
-@Mapper
+@Mapper 
 public interface AppointmentDAO {
-
+ 
 	Map<String, Object> findHospitalDeatilByHno(Map<String, Object> hno);
 
 	List<Map<String, Object>> checkTimeStatus(Map<String, Object> data);

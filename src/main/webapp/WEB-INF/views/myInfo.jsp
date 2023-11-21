@@ -20,12 +20,10 @@
 <script type="text/javascript">
 	$(document).ready(
 			function() {
-				
 				/* 뒤로가기 버튼 */
 				$(document).on("click", ".xi-angle-left", function(){
-					location.href = "/menu";
+					history.back();
 				});
-				
 				$('.health-area i').on(
 						'click',
 						function() {
