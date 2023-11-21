@@ -281,26 +281,21 @@
 		$(document).on("submit", "#telehealthApply", function(event) {
 			if (!loginCheck()) {
 				event.preventDefault();
-			} else if ( !($(this).hasClass("submit-btn-css")) ) {
-				event.preventDefault();
-				$(".dh-modal-text").text("진료가 불가능합니다.");
-				$("#dh-modal-alert").addClass("active").fadeIn();
-			    setTimeout(function() {
-			        $("#dh-modal-alert").fadeOut(function(){
-			            $(this).removeClass("active");
-			        });
-			    }, 1500);
+			} else {
+				if ( !($(".submit").hasClass("submit-btn-css")) ) {
+					event.preventDefault();
+					$(".dh-modal-text").text("진료가 불가능합니다.");
+					$("#dh-modal-alert").addClass("active").fadeIn();
+				    setTimeout(function() {
+				        $("#dh-modal-alert").fadeOut(function(){
+				            $(this).removeClass("active");
+				        });
+				    }, 1500);
+			} else {
+				return true;
 			}
-		});
-		
-		$(document).on("click", ".submit", function() {
-				$(".dh-modal-text").text("진료가 불가능합니다.");
-				$("#dh-modal-alert").addClass("active").fadeIn();
-			    setTimeout(function() {
-			        $("#dh-modal-alert").fadeOut(function(){
-			            $(this).removeClass("active");
-			        });
-			    }, 1500);
+				
+			} 
 		});
 		
 		/* 진료 중일 때만 비대면 진료하기 */

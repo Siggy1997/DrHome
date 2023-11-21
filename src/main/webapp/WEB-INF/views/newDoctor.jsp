@@ -101,10 +101,6 @@ $(document).ready(function() {
 			<input class="vector" type="text" placeholder="성 명" id="rdname" name="rdname">
 		</div>
 		<div class="Group">
-			<p>이미지</p>	
-			<input class="vector" type="text" placeholder="이미지" id="rdimg" name="rdimg">
-		</div>
-		<div class="Group">
 			<p>소 개</p>	
 			<input class="vector" type="text" placeholder="소 개" id="rdinfo" name="rdinfo">
 		</div>

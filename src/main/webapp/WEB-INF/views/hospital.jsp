@@ -264,6 +264,7 @@
     		  $("#optionKeywordBox").val(optionKeywordBox);
     	  } else {
     		  event.preventDefault();
+    		  $(".dh-modal-btn").hide();
 				 $("#dh-modal-alert").addClass("active").fadeIn();
 				    setTimeout(function() {
 				        $("#dh-modal-alert").fadeOut(function(){
@@ -278,7 +279,6 @@
          
          let hospitalName = '';
          let hospitalDelName = '';
-         
          /* 로그인 체크 */
          if( ${sessionScope.mno == null || sessionScope.mno == ''} ){
         	 $('.dh-modal-wrapper').show();
@@ -287,15 +287,16 @@
             if ( $(this).hasClass("xi-heart-o") ) {
             	
             	$(".dh-modal-text").text("즐겨찾는 병원이 등록되었습니다.")
+            	$(".dh-modal-btn").show()
             	$("#dh-modal-alert").addClass("active").fadeIn();
 				    setTimeout(function() {
 				        $("#dh-modal-alert").fadeOut(function(){
 				            $(this).removeClass("active");
 				        });
-				    }, 1500);
+				    }, 2000);
 
 		    	hospitalName = $(this).siblings().find($(".hospitalName")).text();
-		    	$(this).addClass("xi-heart").removeClass("xi-heart-o")
+		    	$(this).addClass("xi-heart").removeClass("xi-heart-o");
                
             /* 채워진 하트 눌렀을 때 -> 빈 하트 */
             } else {
@@ -304,6 +305,7 @@
                
                $(".dh-modal-text").text("즐겨찾는 병원이 해제되었습니다")
                $("#dh-modal-alert").addClass("active").fadeIn();
+               $(".dh-modal-btn").hide();
 					    setTimeout(function() {
 					        $("#dh-modal-alert").fadeOut(function(){
 					            $(this).removeClass("active");
@@ -334,6 +336,7 @@
             return location.href= '/reception/' + hno;
          } else {
         	 $(".dh-modal-text").text("접수가 마감되었습니다.")
+        	 $(".dh-modal-btn").hide();
         	 $("#dh-modal-alert").addClass("active").fadeIn();
 				    setTimeout(function() {
 				        $("#dh-modal-alert").fadeOut(function(){
@@ -732,6 +735,9 @@
                            <div class="reviewScore">${row.hReviewAverage}</div>
                            <div class="reviewCount">(${row.hReviewCount})</div>
                         </div>
+                        <div class="hospitalTime">
+                        	
+                        </div>
                         <div class="hospitalReserve">
                            <div class="receptionStatus"
                               onclick="hospitalReception(${row.hno})"></div>
@@ -937,7 +943,10 @@
 					<img class="dh-alert-img" src="https://cdn-icons-png.flaticon.com/512/6897/6897039.png">
 					알림
 				</div>
-				<div class="dh-modal-text">유형을 선택해 주세요.</div>
+				<div style="display: flex; align-items: center;">
+					<div class="dh-modal-text">유형을 선택해 주세요.</div>
+					<div class="dh-modal-btn" style="display: none;"><button class="dh-hospitalLike" onclick="location.href='/hospitalLike/${sessionScope.mno}'">이동</button></div>
+				</div>
 			</div>
 		</div>
 		<div class="dh-modal-blank"></div>

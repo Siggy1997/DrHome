@@ -443,7 +443,7 @@
 		<div class="graySeperate"></div>
 
 		<div class="section" id="newQnaContainer">
-			<div class="mainTitle">새로 올라온 질문</div>
+			<div class="mainTitle">새로운 질문</div>
 			<div class="swiper swiper2">
 				<div class="swiper-wrapper qna-wrapper">
 					<c:forEach var="qna" items="${newQna }">

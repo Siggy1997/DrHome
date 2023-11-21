@@ -110,6 +110,7 @@ main {
 
 .selectDoctor img {
 	width: 40px;
+	height : 40px;
 	margin-right: 21px;
 	border-radius: 50px;
 }
