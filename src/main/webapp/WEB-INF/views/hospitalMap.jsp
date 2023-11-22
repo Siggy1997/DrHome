@@ -380,7 +380,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 '           </div>' +
                 '            <div class="desc">' +
                 '                <div class="ellipsis">' + address + '</div>' +
-                '                <div class="time">' + opentime + "~" + (nightday == currentDay ? nightendtime : (hHoliday == 1 ? hHolidayEndTime : closetime)) + '</div>' +
+                '                <div class="time">' + opentime + "~" + (nightday == currentDay ? nightendtime : (hHoliday == 1 && (currentDay == 0 || currentDay == 6) ? hHolidayEndTime : closetime)) + '</div>' +
                 '            </div>' +
                 '            <div class="' + dotClass + '">' + "●" + '</div>' +
                 '                <div class="status">' + status + '</div>' +
